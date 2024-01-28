@@ -17,7 +17,7 @@ export const Navbar = () => {
   return (
     <nav
       className={cn(
-        "fixed top-0 z-50 flex w-full items-center bg-background p-6 dark:bg-[#1F1F1F]",
+        "fixed inset-x-0 top-0 z-50 mx-auto flex w-full items-center bg-background p-6 dark:bg-[#1F1F1F]",
         scrolled && "border-b shadow-sm",
       )}
     >
@@ -32,14 +32,14 @@ export const Navbar = () => {
               </Button>
             </SignInButton>
             <SignInButton mode="modal">
-              <Button size="sm">Get Jotion Free</Button>
+              <Button size="sm">Get Zotion Free</Button>
             </SignInButton>
           </>
         )}
         {isAuthenticated && !isLoading && (
           <>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/documents"> Enter Jotion </Link>
+              <Link href="/documents"> Enter Zotion </Link>
             </Button>
             <UserButton afterSignOutUrl="/" />
           </>

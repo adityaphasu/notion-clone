@@ -14,10 +14,10 @@ export const Heading = () => {
     <div className="max-w-3xl space-y-4">
       <h1 className="text-3xl font-bold sm:text-5xl md:text-6xl">
         Your Ideas, Documents, & Plans. Welcome to{" "}
-        <span className="underline">Jotion</span>
+        <span className="underline">Zotion</span>
       </h1>
       <h3 className="text-base font-medium sm:text-xl md:text-2xl">
-        Jotion is the connected workspace where <br /> better, faster work
+        Zotion is the connected workspace where <br /> better, faster work
         happens.
       </h3>
       {isLoading && (
@@ -28,7 +28,7 @@ export const Heading = () => {
       {isAuthenticated && !isLoading && (
         <Button asChild>
           <Link href="/documents">
-            Enter Jotion
+            Enter Zotion
             <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
@@ -36,7 +36,7 @@ export const Heading = () => {
       {!isAuthenticated && !isLoading && (
         <SignInButton mode="modal">
           <Button>
-            Get Jotion free
+            Get Zotion free
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </SignInButton>

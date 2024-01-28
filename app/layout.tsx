@@ -8,7 +8,7 @@ import { Toaster } from "sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Jotion",
+  title: "Zotion",
   description:
     "The seamless platform where creative and productive work happens.",
   icons: {
@@ -41,7 +41,7 @@ export default function RootLayout({
             defaultTheme="system"
             enableSystem
             disableTransitionOnChange
-            storageKey="jotion-theme-2"
+            storageKey="zotion-theme-2"
           >
             <Toaster position="bottom-center" />
             {children}
