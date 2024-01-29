@@ -41,7 +41,7 @@ export const DocumentList = ({
     router.push(`/documents/${documentId}`);
   };
 
-  if (document === undefined) {
+  if (documents === undefined) {
     return (
       <>
         <Item.Skeleton level={level} />
