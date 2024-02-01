@@ -3,7 +3,7 @@
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { useMutation } from "convex/react";
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
@@ -29,11 +29,13 @@ import {
 import { TrashBox } from "./TrashBox";
 import { useSearch } from "@/hooks/useSearch";
 import { useSettings } from "@/hooks/useSettings";
+import { Navbar } from "./Navbar";
 
 const Navigation = () => {
   const search = useSearch();
   const settings = useSettings();
   const pathname = usePathname();
+  const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
 
@@ -184,20 +186,24 @@ const Navigation = () => {
           isMobile && "left-0 w-full",
         )}
       >
-        <nav
-          className={cn(
-            "w-full bg-transparent px-3 py-2",
-            !isCollapsed && "p-0",
-          )}
-        >
-          {isCollapsed && (
-            <MenuIcon
-              onClick={resetWidth}
-              role="button"
-              className="h-6 w-6 text-muted-foreground"
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav
+            className={cn(
+              "w-full bg-transparent px-3 py-2",
+              !isCollapsed && "p-0",
+            )}
+          >
+            {isCollapsed && (
+              <MenuIcon
+                onClick={resetWidth}
+                role="button"
+                className="h-6 w-6 text-muted-foreground"
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
