@@ -8,7 +8,7 @@ export default defineSchema({
     isArchived: v.boolean(),
     parentDocument: v.optional(v.id("documents")),
     content: v.optional(v.string()),
-    converImage: v.optional(v.string()),
+    coverImage: v.optional(v.string()),
     icon: v.optional(v.string()),
     isPublished: v.boolean(),
   })
