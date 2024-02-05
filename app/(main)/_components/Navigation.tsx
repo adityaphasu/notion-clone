@@ -3,7 +3,7 @@
 import React, { ElementRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { useMutation } from "convex/react";
-import { useParams, usePathname } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
 import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
@@ -34,6 +34,7 @@ import { Navbar } from "./Navbar";
 const Navigation = () => {
   const search = useSearch();
   const settings = useSettings();
+  const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
   const isMobile = useMediaQuery("(max-width: 768px)");
@@ -122,7 +123,9 @@ const Navigation = () => {
   };
 
   const handleCreate = () => {
-    const promise = create({ title: "Untitled" });
+    const promise = create({ title: "Untitled" }).then((documentId) =>
+      router.push(`/documents/${documentId}`),
+    );
 
     toast.promise(promise, {
       loading: "Creating a new note....",
@@ -136,7 +139,7 @@ const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar relative z-[99999] flex h-full w-60 flex-col overflow-y-auto bg-secondary",
+          "group/sidebar relative z-[300] flex h-full w-60 flex-col overflow-y-auto bg-secondary",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "w-0",
         )}
@@ -181,7 +184,7 @@ const Navigation = () => {
       <div
         ref={navbarRef}
         className={cn(
-          "absolute left-60 top-0 z-[99999] w-[calc(100%-240px)]",
+          "absolute left-60 top-0 z-[300] w-[calc(100%-240px)]",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "left-0 w-full",
         )}
