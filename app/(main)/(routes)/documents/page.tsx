@@ -29,20 +29,20 @@ const DocumentsPage = () => {
   return (
     <div className="flex h-full flex-col items-center justify-center space-y-4">
       <Image
-        src="/empty.png"
+        src="/empty.svg"
         alt="empty"
         height="300"
         width="300"
         priority
-        className="h-auto w-auto dark:hidden"
+        className="h-auto dark:hidden"
       />
       <Image
-        src="/empty-dark.png"
+        src="/empty-dark.svg"
         alt="empty"
         height="300"
         width="300"
         priority
-        className="hidden h-auto w-auto dark:block"
+        className="hidden h-auto dark:block"
       />
       <h2 className="text-lg font-medium">
         Welcome to {user?.firstName}&apos;s Zotion
