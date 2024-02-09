@@ -1,10 +1,12 @@
 # Zotion
 
+![Banner](/public/readme-banner.png)
+
 This project is a simplified clone of the popular productivity application, Notion. It's designed to replicate some of the core features of Notion, providing a platform where users can create, edit, and organize their notes in a flexible and intuitive interface.
 
 ## Features
 
-**Productivity and Organization**
+**Productivity and Organization**s
 
 - 📝 Notion-style editor for seamless note-taking
 - 📂 Infinite children documents for hierarchical organization
