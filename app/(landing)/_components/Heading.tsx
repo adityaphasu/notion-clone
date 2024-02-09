@@ -16,10 +16,10 @@ export const Heading = () => {
         Your Ideas💡, Documents📕, & Plans🚀. Welcome to{" "}
         <span className="underline">Zotion</span>
       </h1>
-      <h3 className="text-base font-medium sm:text-xl">
+      <h2 className="text-base font-medium sm:text-xl">
         Zotion is the connected workspace where <br /> better, faster work
         happens.
-      </h3>
+      </h2>
       {isLoading && (
         <div className="flex w-full items-center justify-center">
           <Spinner size="md" />
