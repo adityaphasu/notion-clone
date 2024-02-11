@@ -4,6 +4,10 @@
 
 This project is a simplified clone of the popular productivity application, Notion. It's designed to replicate some of the core features of Notion, providing a platform where users can create, edit, and organize their notes in a flexible and intuitive interface.
 
+## Live
+
+Zotion - [https://zotion-app.vercel.app/](https://zotion-app.vercel.app/)
+
 ## Features
 
 **Productivity and Organization**s
