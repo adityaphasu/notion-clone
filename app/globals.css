@@ -71,6 +71,10 @@ body,
   }
 }
 
+.mantine-Menu-dropdown {
+  max-height: 36rem !important;
+}
+
 @layer base {
   * {
     @apply border-border;
