@@ -45,7 +45,6 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         editor={editor}
         theme={resolvedTheme === "dark" ? "dark" : "light"}
         onChange={handleEditorChange}
-        className="overflow-hidden"
       />
     </div>
   );
