@@ -1,10 +1,12 @@
 "use client";
 
 import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { BlockNoteView, useBlockNote, DragHandleMenu } from "@blocknote/react";
-import "@blocknote/core/style.css";
+import { useCreateBlockNote } from "@blocknote/react";
+import { BlockNoteView } from "@blocknote/mantine";
 import { useTheme } from "next-themes";
 import { useEdgeStore } from "@/lib/edgestore";
+import "@blocknote/core/style.css";
+import "@blocknote/mantine/style.css";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -25,23 +27,26 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     return res.url;
   };
 
-  const editor: BlockNoteEditor = useBlockNote({
-    editable,
+  const editor: BlockNoteEditor = useCreateBlockNote({
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
-    onEditorContentChange: (editor) => {
-      onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
-    },
     uploadFile: handleUpload,
   });
+
+  const handleEditorChange = () => {
+    onChange(JSON.stringify(editor.document, null, 2));
+  };
 
   return (
     <div>
       <BlockNoteView
+        editable={editable}
         editor={editor}
         theme={resolvedTheme === "dark" ? "dark" : "light"}
-      ></BlockNoteView>
+        onChange={handleEditorChange}
+        className="overflow-hidden"
+      />
     </div>
   );
 };
