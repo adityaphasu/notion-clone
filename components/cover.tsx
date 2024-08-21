@@ -64,7 +64,7 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
             size="sm"
           >
             <X className="mr-2 h-4 w-4" />
-            Change cover
+            Remove
           </Button>
         </div>
       )}
