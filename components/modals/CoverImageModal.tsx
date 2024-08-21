@@ -1,6 +1,11 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { useCoverImage } from "@/hooks/useCoverImage";
 import { SingleImageDropzone } from "@/components/single-image-dropzone";
 import { useState } from "react";
@@ -49,6 +54,9 @@ export const CoverImageModal = () => {
 
   return (
     <Dialog open={coverImage.isOpen} onOpenChange={coverImage.onClose}>
+      <DialogTitle>
+        <h1 className="sr-only">Change Cover Image</h1>
+      </DialogTitle>
       <DialogContent>
         <DialogHeader>
           <h2 className="text-center text-lg font-semibold">Cover Image</h2>
