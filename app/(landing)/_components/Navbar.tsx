@@ -22,29 +22,32 @@ export const Navbar = () => {
       )}
     >
       <Logo />
-      <div className="flex w-full items-center justify-between gap-x-2 md:ml-auto md:justify-end">
-        {isLoading && <Spinner />}
-        {!isLoading && !isAuthenticated && (
-          <>
-            <SignInButton mode="modal">
-              <Button variant="ghost" size="sm">
-                Log In
+      <div className="flex w-full items-center justify-end md:ml-auto">
+        <div className="flex items-center gap-x-2">
+          {isLoading && <Spinner />}
+          {!isLoading && !isAuthenticated && (
+            <>
+              <SignInButton mode="modal">
+                <Button variant="ghost" size="sm">
+                  Log In
+                </Button>
+              </SignInButton>
+              <SignInButton mode="modal">
+                <Button size="sm">Get Zotion Free</Button>
+              </SignInButton>
+            </>
+          )}
+
+          {isAuthenticated && !isLoading && (
+            <>
+              <Button variant="ghost" size="sm" asChild>
+                <Link href="/documents"> Enter Zotion </Link>
               </Button>
-            </SignInButton>
-            <SignInButton mode="modal">
-              <Button size="sm">Get Zotion Free</Button>
-            </SignInButton>
-          </>
-        )}
-        {isAuthenticated && !isLoading && (
-          <>
-            <Button variant="ghost" size="sm" asChild>
-              <Link href="/documents"> Enter Zotion </Link>
-            </Button>
-            <UserButton afterSignOutUrl="/" />
-          </>
-        )}
-        <ModeToggle />
+              <UserButton afterSignOutUrl="/" />
+            </>
+          )}
+          <ModeToggle />
+        </div>
       </div>
     </nav>
   );
