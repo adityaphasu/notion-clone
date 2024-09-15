@@ -89,7 +89,7 @@ export const Publish = ({ initialData }: PublishProps) => {
             <div className="flex items-center">
               <input
                 value={url}
-                className="h-8 flex-1 truncate rounded-l-md border bg-muted px-2 text-xs"
+                className="h-8 flex-1 rounded-l-md border bg-muted px-2 text-xs"
                 disabled
               />
               <Button
