@@ -35,6 +35,10 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
     setTimeout(() => {
       setValue(initialData.title);
       inputRef.current?.focus();
+      if (inputRef.current) {
+        const textLength = inputRef.current.value.length;
+        inputRef.current.setSelectionRange(textLength, textLength);
+      }
     }, 0);
   };
 
