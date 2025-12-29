@@ -55,7 +55,7 @@ export const CoverImageModal = () => {
   return (
     <Dialog open={coverImage.isOpen} onOpenChange={coverImage.onClose}>
       <DialogTitle>
-        <h1 className="sr-only">Change Cover Image</h1>
+        <span className="sr-only">Change Cover Image</span>
       </DialogTitle>
       <DialogContent>
         <DialogHeader>
