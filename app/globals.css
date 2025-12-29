@@ -71,8 +71,12 @@ body,
   }
 }
 
-.mantine-Menu-dropdown {
-  max-height: 36rem !important;
+.mantine-Popover-dropdown {
+  max-height: 32rem !important;
+}
+
+.bn-container {
+  --bn-ui-base-z-index: 300 !important;
 }
 
 @layer base {
