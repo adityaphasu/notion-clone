@@ -139,7 +139,7 @@ const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar relative z-[300] flex h-full w-60 flex-col overflow-y-auto bg-secondary",
+          "group/sidebar relative z-[300] flex h-full w-60 flex-col overflow-y-auto overflow-x-hidden bg-secondary",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "w-0",
         )}
@@ -190,7 +190,9 @@ const Navigation = () => {
         )}
       >
         {!!params.documentId ? (
-          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+          (!isMobile || isCollapsed) && (
+            <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+          )
         ) : (
           <nav
             className={cn(
