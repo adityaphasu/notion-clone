@@ -39,7 +39,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <BlockNoteView
         editable={editable}
         editor={editor}

@@ -75,8 +75,8 @@ body,
   max-height: 32rem !important;
 }
 
-.bn-container {
-  --bn-ui-base-z-index: 300 !important;
+.bn-color-picker-dropdown {
+  top: -110px !important;
 }
 
 @layer base {
