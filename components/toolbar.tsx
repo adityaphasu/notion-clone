@@ -1,6 +1,6 @@
 "use client";
 
-import { ElementRef, useRef, useState } from "react";
+import { ElementRef, useEffect, useRef, useState } from "react";
 
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -12,6 +12,7 @@ import { Button } from "./ui/button";
 import TextareaAutosize from "react-textarea-autosize";
 import { IconPicker } from "./icon-picker";
 import { ImageIcon, Smile, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ToolbarProps {
   initialData: Doc<"documents">;
@@ -30,32 +31,39 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
 
   const enableInput = () => {
     if (preview) return;
-
     setIsEditing(true);
-    setTimeout(() => {
-      setValue(initialData.title);
-      inputRef.current?.focus();
-      if (inputRef.current) {
-        const textLength = inputRef.current.value.length;
-        inputRef.current.setSelectionRange(textLength, textLength);
-      }
-    }, 0);
+    inputRef.current?.focus();
   };
 
   const disableInput = () => setIsEditing(false);
 
+  useEffect(() => {
+    if (!isEditing) {
+      setValue(initialData.title);
+    }
+  }, [initialData.title, isEditing]);
+
+  useEffect(() => {
+    if (value === initialData.title) return;
+
+    const timer = setTimeout(() => {
+      update({
+        id: initialData._id,
+        title: value || "Untitled",
+      });
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [value, initialData._id, initialData.title, update]);
+
   const onInput = (value: string) => {
     setValue(value);
-    update({
-      id: initialData._id,
-      title: value || "Untitled",
-    });
   };
 
   const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      disableInput();
+      inputRef.current?.blur();
     }
   };
 
@@ -119,24 +127,23 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           </Button>
         )}
       </div>
-      {isEditing && !preview ? (
-        <TextareaAutosize
-          ref={inputRef}
-          spellCheck="false"
-          onBlur={disableInput}
-          onKeyDown={onKeyDown}
-          value={value}
-          onChange={(e) => onInput(e.target.value)}
-          className="resize-none break-words bg-transparent text-5xl font-bold text-[#3F3F3F] outline-none dark:text-[#CFCFCF]"
-        />
-      ) : (
-        <div
-          onClick={enableInput}
-          className="break-words pb-[.7188rem] text-5xl font-bold  text-[#3F3F3F] outline-none dark:text-[#CFCFCF]"
-        >
-          {initialData.title}
-        </div>
-      )}
+
+      <TextareaAutosize
+        ref={inputRef}
+        placeholder="Untitled"
+        spellCheck="false"
+        onBlur={disableInput}
+        onFocus={() => setIsEditing(true)}
+        onKeyDown={onKeyDown}
+        value={value}
+        disabled={preview}
+        onChange={(e) => onInput(e.target.value)}
+        className={cn(
+          "resize-none break-words bg-transparent text-5xl font-bold outline-none",
+          "text-[#3F3F3F] placeholder:text-gray-300 disabled:cursor-default dark:text-[#CFCFCF]",
+          !isEditing && "cursor-pointer",
+        )}
+      />
     </div>
   );
 };
