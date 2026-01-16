@@ -1,10 +1,16 @@
 "use client";
 
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
+import {
+  BlockNoteEditor,
+  PartialBlock,
+  createCodeBlockSpec,
+  BlockNoteSchema,
+} from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
 import { BlockNoteView } from "@blocknote/mantine";
 import { useTheme } from "next-themes";
 import { useEdgeStore } from "@/lib/edgestore";
+import { codeBlockOptions } from "@blocknote/code-block";
 import "@blocknote/core/style.css";
 import "@blocknote/mantine/style.css";
 
@@ -13,6 +19,27 @@ interface EditorProps {
   initialContent?: string;
   editable?: boolean;
 }
+
+const schema = BlockNoteSchema.create().extend({
+  blockSpecs: {
+    codeBlock: createCodeBlockSpec({
+      ...codeBlockOptions,
+      defaultLanguage: "typescript",
+      supportedLanguages: {
+        typescript: { name: "TypeScript", aliases: ["ts"] },
+        javascript: { name: "JavaScript", aliases: ["js"] },
+        python: { name: "Python", aliases: ["py"] },
+        cpp: { name: "C++", aliases: ["cpp", "c++"] },
+        java: { name: "Java" },
+        rust: { name: "Rust", aliases: ["rs"] },
+        go: { name: "Go" },
+        sql: { name: "SQL" },
+        html: { name: "HTML" },
+        css: { name: "CSS" },
+      },
+    }),
+  },
+});
 
 const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const { resolvedTheme } = useTheme();
@@ -32,6 +59,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
     uploadFile: handleUpload,
+    schema,
   });
 
   const handleEditorChange = () => {
