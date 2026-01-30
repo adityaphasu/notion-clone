@@ -1,6 +1,11 @@
 "use client";
 
-import { Dialog, DialogContent, DialogHeader } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { useSettings } from "@/hooks/useSettings";
 import { ModeToggle } from "../mode-toggle";
@@ -9,6 +14,7 @@ export const SettingsModal = () => {
   const settings = useSettings();
   return (
     <Dialog open={settings.isOpen} onOpenChange={settings.onClose}>
+      <DialogTitle hidden>Settings</DialogTitle>
       <DialogContent>
         <DialogHeader className="border-b pb-3">
           <h2 className="text-lg font-medium">My settings</h2>

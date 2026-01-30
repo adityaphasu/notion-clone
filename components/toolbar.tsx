@@ -110,7 +110,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           className={cn(
             "text-6xl",
             !initialData.coverImage && "pt-6",
-            initialData.coverImage && "-mt-20",
+            initialData.coverImage && "-mt-8",
           )}
         >
           {initialData.icon}

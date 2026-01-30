@@ -87,8 +87,9 @@ export const TrashBox = () => {
           </p>
         )}
         {filteredDocuments?.map((document) => (
-          <button
+          <div
             key={document._id}
+            role="button"
             onClick={() => onClick(document._id)}
             className="flex w-full items-center justify-between rounded-sm text-sm text-primary hover:bg-primary/5"
             aria-label="Document"
@@ -111,7 +112,7 @@ export const TrashBox = () => {
                 </button>
               </ConfirmModal>
             </div>
-          </button>
+          </div>
         ))}
       </div>
     </section>

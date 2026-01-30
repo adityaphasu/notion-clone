@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/command";
 import { useSearch } from "@/hooks/useSearch";
 import { api } from "@/convex/_generated/api";
+import { DialogTitle } from "./ui/dialog";
 
 export const SearchCommand = () => {
   const { user } = useUser();
@@ -54,6 +55,7 @@ export const SearchCommand = () => {
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
+      <DialogTitle hidden>Search Documents</DialogTitle>
       <CommandInput placeholder={`Search ${user?.fullName}'s Zotion..`} />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
