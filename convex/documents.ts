@@ -353,3 +353,49 @@ export const removeCoverImage = mutation({
     return document;
   },
 });
+
+export const reorder = mutation({
+  args: {
+    id: v.id("documents"),
+    parentDocument: v.optional(v.id("documents")),
+    newOrder: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const siblings = await ctx.db
+      .query("documents")
+      .withIndex("by_user_parent", (q) =>
+        q.eq("userId", userId).eq("parentDocument", args.parentDocument),
+      )
+      .filter((q) => q.eq(q.field("isArchived"), false))
+      .collect();
+
+    siblings.sort((a, b) => {
+      if (a.order === undefined && b.order === undefined) return 0;
+      if (a.order === undefined) return -1;
+      if (b.order === undefined) return 1;
+      return a.order - b.order;
+    });
+
+    const itemIndex = siblings.findIndex((sibling) => sibling._id === args.id);
+    const [movedItem] = siblings.splice(itemIndex, 1);
+    siblings.splice(args.newOrder, 0, movedItem);
+
+    await Promise.all(
+      siblings.map((sibling, index) =>
+        ctx.db.patch(sibling._id, {
+          order: index,
+        }),
+      ),
+    );
+
+    return true;
+  },
+});
