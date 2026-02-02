@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "convex/react";
 import { useParams, useRouter } from "next/navigation";
 
 import {
   DndContext,
-  closestCenter,
+  closestCorners,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -18,7 +18,12 @@ import {
   sortableKeyboardCoordinates,
   verticalListSortingStrategy,
   useSortable,
+  arrayMove,
 } from "@dnd-kit/sortable";
+import {
+  restrictToVerticalAxis,
+  restrictToParentElement,
+} from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 
 import { cn } from "@/lib/utils";
@@ -35,7 +40,7 @@ interface SortableItemProps {
   onExpand: (id: string) => void;
   expanded: boolean;
   onRedirect: (id: string) => void;
-  activeId: string | string[];
+  activeId?: string | string[];
 }
 interface DocumentListProps {
   parentDocumentId?: Id<"documents">;
@@ -61,7 +66,9 @@ const SortableItem = ({
   } = useSortable({ id: document._id });
 
   const style = {
-    transform: CSS.Transform.toString(transform),
+    transform: CSS.Transform.toString(
+      transform ? { ...transform, scaleY: 1, scaleX: 1 } : null,
+    ),
     transition,
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 100 : undefined,
@@ -93,7 +100,25 @@ export const DocumentList = ({
 }: DocumentListProps) => {
   const params = useParams();
   const router = useRouter();
+  const reorder = useMutation(api.documents.reorder);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [isDragging, setIsDragging] = useState(false);
+  const [orderedDocuments, setOrderedDocuments] = useState<Doc<"documents">[]>(
+    [],
+  );
+
+  const documents = useQuery(api.documents.getSidebar, {
+    parentDocument: parentDocumentId,
+  });
+
+  useEffect(() => {
+    if (isDragging) {
+      return;
+    }
+    if (documents) {
+      setOrderedDocuments(documents);
+    }
+  }, [documents]);
 
   const onExpand = (documentId: string) => {
     setExpanded((prevExpanded) => ({
@@ -101,8 +126,6 @@ export const DocumentList = ({
       [documentId]: !prevExpanded[documentId],
     }));
   };
-
-  const reorder = useMutation(api.documents.reorder);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -115,20 +138,21 @@ export const DocumentList = ({
     }),
   );
 
-  const documents = useQuery(api.documents.getSidebar, {
-    parentDocument: parentDocumentId,
-  });
-
   const handleDragEnd = (event: DragEndEvent) => {
+    setIsDragging(false);
+
     const { active, over } = event;
 
     if (!over) return;
 
     if (active.id !== over.id) {
-      const oldIndex = documents?.findIndex((doc) => doc._id === active.id);
-      const newIndex = documents?.findIndex((doc) => doc._id === over.id);
+      const oldIndex = orderedDocuments.findIndex(
+        (doc) => doc._id === active.id,
+      );
+      const newIndex = orderedDocuments.findIndex((doc) => doc._id === over.id);
 
-      if (oldIndex !== undefined && newIndex !== undefined) {
+      if (oldIndex !== -1 && newIndex !== -1) {
+        setOrderedDocuments((prev) => arrayMove(prev, oldIndex, newIndex));
         reorder({
           id: active.id as Id<"documents">,
           parentDocument: parentDocumentId,
@@ -157,35 +181,40 @@ export const DocumentList = ({
   }
 
   return (
-    <>
-      <p
-        style={{ paddingLeft: level ? `${level * 12 + 25}px` : undefined }}
-        className={cn(
-          "hidden text-sm font-medium text-muted-foreground/80",
-          expanded && "last:block",
-          level === 0 && "hidden",
-        )}
+    <div className="w-full">
+      {orderedDocuments.length === 0 && level !== 0 && (
+        <p
+          style={{ paddingLeft: level ? `${level * 12 + 25}px` : undefined }}
+          className="py-1 text-sm font-medium text-muted-foreground/80"
+        >
+          No pages inside
+        </p>
+      )}
+
+      <DndContext
+        sensors={sensors}
+        onDragStart={() => setIsDragging(true)}
+        onDragEnd={handleDragEnd}
+        modifiers={[restrictToVerticalAxis, restrictToParentElement]}
+        collisionDetection={closestCorners}
       >
-        No pages inside
-      </p>
-      {documents?.map((document) => (
-        <div key={document._id}>
-          <Item
-            id={document._id}
-            onClick={() => onRedirect(document._id)}
-            label={document.title}
-            icon={FileIcon}
-            documentIcon={document.icon}
-            active={params.documentId === document._id}
-            level={level}
-            onExpand={() => onExpand(document._id)}
-            expanded={expanded[document._id]}
-          />
-          {expanded[document._id] && (
-            <DocumentList parentDocumentId={document._id} level={level + 1} />
-          )}
-        </div>
-      ))}
-    </>
+        <SortableContext
+          items={orderedDocuments.map((doc) => doc._id)}
+          strategy={verticalListSortingStrategy}
+        >
+          {orderedDocuments.map((document) => (
+            <SortableItem
+              key={document._id}
+              document={document}
+              level={level}
+              onExpand={onExpand}
+              expanded={expanded[document._id]}
+              onRedirect={onRedirect}
+              activeId={params.documentId}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
+    </div>
   );
 };
