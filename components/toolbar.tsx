@@ -35,7 +35,9 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
     inputRef.current?.focus();
   };
 
-  const disableInput = () => setIsEditing(false);
+  const disableInput = () => {
+    setIsEditing(false);
+  };
 
   useEffect(() => {
     if (!isEditing) {
@@ -51,7 +53,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         id: initialData._id,
         title: value || "Untitled",
       });
-    }, 500);
+    }, 400);
 
     return () => clearTimeout(timer);
   }, [value, initialData._id, initialData.title, update]);
@@ -63,7 +65,13 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
   const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      inputRef.current?.blur();
+      update({
+        id: initialData._id,
+        title: value || "Untitled",
+      });
+      setTimeout(() => {
+        inputRef.current?.blur();
+      }, 400);
     }
   };
 
