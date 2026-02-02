@@ -72,6 +72,16 @@ export const getSidebar = query({
       .order("desc")
       .collect();
 
+    documents.sort((a, b) => {
+      if (a.order === undefined && b.order === undefined) {
+        return a._creationTime > b._creationTime ? -1 : 1;
+      }
+      if (a.order === undefined) return -1;
+      if (b.order === undefined) return 1;
+
+      return a.order - b.order;
+    });
+
     return documents;
   },
 });
