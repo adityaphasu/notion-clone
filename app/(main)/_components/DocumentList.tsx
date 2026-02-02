@@ -1,8 +1,25 @@
 "use client";
 
 import { useState } from "react";
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { useParams, useRouter } from "next/navigation";
+
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
@@ -12,11 +29,63 @@ import { Item } from "./Item";
 
 import { FileIcon } from "lucide-react";
 
+interface SortableItemProps {
+  document: Doc<"documents">;
+  level: number;
+  onExpand: (id: string) => void;
+  expanded: boolean;
+  onRedirect: (id: string) => void;
+  activeId: string | string[];
+}
 interface DocumentListProps {
   parentDocumentId?: Id<"documents">;
   level?: number;
   data?: Doc<"documents">[];
 }
+
+const SortableItem = ({
+  document,
+  level,
+  onExpand,
+  expanded,
+  onRedirect,
+  activeId,
+}: SortableItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: document._id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+    zIndex: isDragging ? 100 : undefined,
+  };
+
+  return (
+    <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
+      <Item
+        id={document._id}
+        onClick={() => onRedirect(document._id)}
+        label={document.title}
+        icon={FileIcon}
+        documentIcon={document.icon}
+        active={activeId === document._id}
+        level={level}
+        onExpand={() => onExpand(document._id)}
+        expanded={expanded}
+      />
+      {expanded && (
+        <DocumentList parentDocumentId={document._id} level={level + 1} />
+      )}
+    </div>
+  );
+};
 
 export const DocumentList = ({
   parentDocumentId,
@@ -33,9 +102,41 @@ export const DocumentList = ({
     }));
   };
 
+  const reorder = useMutation(api.documents.reorder);
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    }),
+  );
+
   const documents = useQuery(api.documents.getSidebar, {
     parentDocument: parentDocumentId,
   });
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (!over) return;
+
+    if (active.id !== over.id) {
+      const oldIndex = documents?.findIndex((doc) => doc._id === active.id);
+      const newIndex = documents?.findIndex((doc) => doc._id === over.id);
+
+      if (oldIndex !== undefined && newIndex !== undefined) {
+        reorder({
+          id: active.id as Id<"documents">,
+          parentDocument: parentDocumentId,
+          newOrder: newIndex,
+        });
+      }
+    }
+  };
 
   const onRedirect = (documentId: string) => {
     router.push(`/documents/${documentId}`);
