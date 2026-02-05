@@ -10,27 +10,28 @@ Zotion - [https://zotion-app.vercel.app/](https://zotion-app.vercel.app/)
 
 ## Features
 
-**Productivity and Organization**s
+### Productivity and Organization
 
 - 📝 Notion-style editor for seamless note-taking
 - 📂 Infinite children documents for hierarchical organization
+- 🖐️ Drag-and-drop reordering for intuitive file managemen
 - ➡️🔀⬅️ Expandable and fully collapsible sidebar for easy navigation
 - 🎨 Customizable icons for each document, updating in real-time
 - 🗑️ Trash can with soft delete and file recovery options
 
-**User Experience**
+### User Experience
 
 - 🌓 Light and Dark mode to suit preferences
 - 📱 Full mobile responsiveness for productivity on the go
 - 🛬 Landing page for a welcoming user entry point
 - 🖼️ Cover image for each document to add a personal touch
 
-**Data Management**
+### Data Management
 
 - 🔄 Real-time database for instant data updates
 - 📤📥 File upload, deletion, and replacement options
 
-**Security and Sharing**
+### Security and Sharing
 
 - 🔐 Authentication to secure notes
 - 🌍 Option to publish your note to the web for sharing
@@ -45,6 +46,7 @@ Zotion - [https://zotion-app.vercel.app/](https://zotion-app.vercel.app/)
 ![Convex](https://img.shields.io/badge/Convex-ee342f.svg?style=for-the-badge&logo=Convex&logoColor=white)
 ![Edgestore](https://img.shields.io/badge/Edgestore-a57fff.svg?style=for-the-badge&logo=Edgestore&logoColor=white)
 ![Blocknote](https://img.shields.io/badge/Blocknote-ff8c00.svg?style=for-the-badge&logo=Blocknote&logoColor=white)
+![dnd-kit](https://img.shields.io/badge/dnd--kit-000000?style=for-the-badge&logo=react&logoColor=white)
 
 ## Installation
 
@@ -58,7 +60,6 @@ npm install
 3. Set up the environment variables
 
 ```
-# Deployment used by `npx convex dev`
 CONVEX_DEPLOYMENT=
 NEXT_PUBLIC_CONVEX_URL=
 
