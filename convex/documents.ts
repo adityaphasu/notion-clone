@@ -409,3 +409,26 @@ export const reorder = mutation({
     return true;
   },
 });
+
+export const removeAll = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const documents = await ctx.db
+      .query("documents")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("isArchived"), true))
+      .collect();
+
+    const promises = documents.map((document) => ctx.db.delete(document._id));
+    await Promise.all(promises);
+    return true;
+  },
+});

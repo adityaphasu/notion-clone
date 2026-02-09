@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { Search, Trash, Undo } from "lucide-react";
+import { Search, Trash, Trash2, Undo } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -17,6 +17,7 @@ export const TrashBox = () => {
   const documents = useQuery(api.documents.getTrash);
   const restore = useMutation(api.documents.restore);
   const remove = useMutation(api.documents.remove);
+  const removeAll = useMutation(api.documents.removeAll);
 
   const [search, setSearch] = useState("");
 
@@ -56,6 +57,16 @@ export const TrashBox = () => {
     }
   };
 
+  const onEmptyTrash = () => {
+    const promise = removeAll();
+
+    toast.promise(promise, {
+      loading: "Emptying trash..",
+      success: "Trash emptied!",
+      error: "Failed to empty trash.",
+    });
+  };
+
   if (documents === undefined) {
     return (
       <div
@@ -79,7 +90,18 @@ export const TrashBox = () => {
           placeholder="Filter by page title..."
           aria-label="Filter by page title"
         />
+        {documents.length > 0 && (
+          <ConfirmModal onConfirm={onEmptyTrash}>
+            <div
+              role="button"
+              className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+            >
+              <Trash2 className="size-4 text-rose-500" />
+            </div>
+          </ConfirmModal>
+        )}
       </div>
+
       <div className="mt-2 px-1 pb-1">
         {filteredDocuments?.length === 0 && (
           <p className="pb-2 text-center text-xs text-muted-foreground">
