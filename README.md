@@ -60,7 +60,7 @@ npm install
 3. Set up the environment variables
 
 ```
-CONVEX_DEPLOYMENT=
+CONVEX_DEPLOY_KEY=
 NEXT_PUBLIC_CONVEX_URL=
 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
