@@ -1,5 +1,6 @@
 "use client";
 
+import { ActionTooltip } from "@/components/action-tooltip";
 import { ConfirmModal } from "@/components/modals/ConfirmModal";
 import { Spinner } from "@/components/spinner";
 import { Input } from "@/components/ui/input";
@@ -92,12 +93,14 @@ export const TrashBox = () => {
         />
         {documents.length > 0 && (
           <ConfirmModal onConfirm={onEmptyTrash}>
-            <div
-              role="button"
-              className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
-            >
-              <Trash2 className="size-4 text-rose-500" />
-            </div>
+            <ActionTooltip label="Empty trash">
+              <div
+                role="button"
+                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+              >
+                <Trash2 className="size-4 text-rose-500" />
+              </div>
+            </ActionTooltip>
           </ConfirmModal>
         )}
       </div>
@@ -118,20 +121,24 @@ export const TrashBox = () => {
           >
             <span className="truncate pl-2">{document.title}</span>
             <div className="flex items-center">
-              <button
-                onClick={(e) => onRestore(e, document._id)}
-                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
-                aria-label="Restore Document"
-              >
-                <Undo className="h-4 w-4 text-muted-foreground " />
-              </button>
-              <ConfirmModal onConfirm={() => onRemove(document._id)}>
+              <ActionTooltip label="Restore page">
                 <button
+                  onClick={(e) => onRestore(e, document._id)}
                   className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
-                  aria-label="Delete Permanently"
+                  aria-label="Restore Document"
                 >
-                  <Trash className="h-4 w-4 text-muted-foreground " />
+                  <Undo className="h-4 w-4 text-muted-foreground " />
                 </button>
+              </ActionTooltip>
+              <ConfirmModal onConfirm={() => onRemove(document._id)}>
+                <ActionTooltip label="Delete forever">
+                  <button
+                    className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                    aria-label="Delete Permanently"
+                  >
+                    <Trash className="h-4 w-4 text-muted-foreground " />
+                  </button>
+                </ActionTooltip>
               </ConfirmModal>
             </div>
           </div>
