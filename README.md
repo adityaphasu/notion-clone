@@ -60,7 +60,7 @@ npm install
 3. Set up the environment variables
 
 ```
-CONVEX_DEPLOY_KEY=
+CONVEX_DEPLOYMENT=
 NEXT_PUBLIC_CONVEX_URL=
 
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
@@ -68,6 +68,9 @@ CLERK_SECRET_KEY=
 
 EDGE_STORE_ACCESS_KEY=
 EDGE_STORE_SECRET_KEY=
+
+// for deploying
+CONVEX_DEPLOY_KEY=
 ```
 
 4. Run Convex
