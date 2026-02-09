@@ -66,6 +66,15 @@ export const TrashBox = () => {
       success: "Trash emptied!",
       error: "Failed to empty trash.",
     });
+
+    if (params.documentId) {
+      const isCurrentDocInTrash = documents?.some(
+        (doc) => doc._id === params.documentId,
+      );
+      if (isCurrentDocInTrash) {
+        router.push("/documents");
+      }
+    }
   };
 
   if (documents === undefined) {
@@ -93,14 +102,16 @@ export const TrashBox = () => {
         />
         {documents.length > 0 && (
           <ConfirmModal onConfirm={onEmptyTrash}>
-            <ActionTooltip label="Empty trash">
-              <div
-                role="button"
-                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
-              >
-                <Trash2 className="size-4 text-rose-500" />
-              </div>
-            </ActionTooltip>
+            <div>
+              <ActionTooltip label="Empty trash">
+                <div
+                  role="button"
+                  className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                >
+                  <Trash2 className="size-4 text-rose-500" />
+                </div>
+              </ActionTooltip>
+            </div>
           </ConfirmModal>
         )}
       </div>
@@ -127,18 +138,20 @@ export const TrashBox = () => {
                   className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                   aria-label="Restore Document"
                 >
-                  <Undo className="h-4 w-4 text-muted-foreground " />
+                  <Undo className="h-4 w-4 text-muted-foreground" />
                 </button>
               </ActionTooltip>
               <ConfirmModal onConfirm={() => onRemove(document._id)}>
-                <ActionTooltip label="Delete forever">
-                  <button
-                    className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
-                    aria-label="Delete Permanently"
-                  >
-                    <Trash className="h-4 w-4 text-muted-foreground " />
-                  </button>
-                </ActionTooltip>
+                <div>
+                  <ActionTooltip label="Delete forever">
+                    <button
+                      className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                      aria-label="Delete Permanently"
+                    >
+                      <Trash className="h-4 w-4 text-muted-foreground" />
+                    </button>
+                  </ActionTooltip>
+                </div>
               </ConfirmModal>
             </div>
           </div>
