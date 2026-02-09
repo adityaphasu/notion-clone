@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { toast } from "sonner";
 import {
@@ -51,13 +51,18 @@ export const Item = ({
 }: ItemProps) => {
   const { user } = useUser();
   const router = useRouter();
+  const params = useParams();
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.documents.archive);
 
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
     if (!id) return;
-    const promise = archive({ id }).then(() => router.push("/documents"));
+    const promise = archive({ id }).then(() => {
+      if (params.documentId === id) {
+        router.push("/documents");
+      }
+    });
 
     toast.promise(promise, {
       loading: "Moving to trash...",
