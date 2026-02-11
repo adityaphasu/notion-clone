@@ -22,7 +22,7 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/nextjs";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -106,7 +106,7 @@ export const Item = ({
       role="button"
       style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
       className={cn(
-        "group flex min-h-6.75 w-full items-center py-1 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5",
+        "group text-muted-foreground hover:bg-primary/5 flex min-h-6.75 w-full items-center py-1 pr-3 text-sm font-medium",
         active && "bg-primary/5 text-primary",
       )}
     >
@@ -116,18 +116,18 @@ export const Item = ({
           className="mr-1 h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
           onClick={handleExpand}
         >
-          <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
+          <ChevronIcon className="text-muted-foreground/50 h-4 w-4 shrink-0" />
         </div>
       )}
       {documentIcon ? (
         <div className="mr-2 shrink-0 text-[1.125rem]">{documentIcon}</div>
       ) : (
-        <Icon className="mr-2 h-4.5 w-4.5 shrink-0 text-muted-foreground" />
+        <Icon className="text-muted-foreground mr-2 h-4.5 w-4.5 shrink-0" />
       )}
 
       <span className="truncate">{label}</span>
       {isSearch && (
-        <kbd className="pointer-events-none ml-auto inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[.625rem] font-medium text-muted-foreground opacity-100 dark:bg-neutral-700">
+        <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none dark:bg-neutral-700">
           <span className="text-xs">CTRL</span>K
         </kbd>
       )}
@@ -137,9 +137,9 @@ export const Item = ({
             <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
               <div
                 role="button"
-                className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+                className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
               >
-                <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+                <MoreHorizontal className="text-muted-foreground h-4 w-4" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
@@ -153,7 +153,7 @@ export const Item = ({
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <div className="p-2 text-xs text-muted-foreground">
+              <div className="text-muted-foreground p-2 text-xs">
                 Last edited by: {user?.fullName}
               </div>
             </DropdownMenuContent>
@@ -161,9 +161,9 @@ export const Item = ({
           <div
             role="button"
             onClick={onCreate}
-            className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
+            className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
           >
-            <Plus className="h-4 w-4 text-muted-foreground" />
+            <Plus className="text-muted-foreground h-4 w-4" />
           </div>
         </div>
       )}

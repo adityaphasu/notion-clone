@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
-import { useUser } from "@clerk/clerk-react";
+import { useUser } from "@clerk/nextjs";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
@@ -57,7 +57,7 @@ export const Menu = ({ documentId }: MenuProps) => {
           Delete
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <div className="p-2 text-xs text-muted-foreground">
+        <div className="text-muted-foreground p-2 text-xs">
           Last edited by {user?.fullName}
         </div>
       </DropdownMenuContent>
