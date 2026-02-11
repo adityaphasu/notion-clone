@@ -161,7 +161,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         disabled={preview}
         onChange={(e) => onInput(e.target.value)}
         className={cn(
-          "resize-none break-words bg-transparent text-5xl font-bold outline-none",
+          "resize-none wrap-break-word bg-transparent text-5xl font-bold outline-hidden",
           "text-[#3F3F3F] placeholder:text-gray-300 disabled:cursor-default dark:text-[#CFCFCF]",
           !isEditing && "cursor-pointer",
         )}

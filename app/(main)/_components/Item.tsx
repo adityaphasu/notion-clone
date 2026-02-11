@@ -106,7 +106,7 @@ export const Item = ({
       role="button"
       style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
       className={cn(
-        "group flex min-h-[1.6875rem] w-full items-center py-1 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5",
+        "group flex min-h-6.75 w-full items-center py-1 pr-3 text-sm font-medium text-muted-foreground hover:bg-primary/5",
         active && "bg-primary/5 text-primary",
       )}
     >
@@ -122,7 +122,7 @@ export const Item = ({
       {documentIcon ? (
         <div className="mr-2 shrink-0 text-[1.125rem]">{documentIcon}</div>
       ) : (
-        <Icon className="mr-2 h-[1.125rem] w-[1.125rem] shrink-0 text-muted-foreground" />
+        <Icon className="mr-2 h-4.5 w-4.5 shrink-0 text-muted-foreground" />
       )}
 
       <span className="truncate">{label}</span>

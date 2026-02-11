@@ -4,7 +4,7 @@ export const Heroes = () => {
   return (
     <div className="flex max-w-5xl flex-col items-center justify-center">
       <div className="flex items-center">
-        <div className="relative h-[18.75rem] w-[18.75rem] sm:h-[21.875rem] sm:w-[21.875rem] md:h-[25rem] md:w-[25rem]">
+        <div className="relative h-75 w-75 sm:h-87.5 sm:w-87.5 md:h-100 md:w-100">
           <Image
             src="/idea.svg"
             fill
@@ -18,7 +18,7 @@ export const Heroes = () => {
             alt="Idea"
           />
         </div>
-        <div className="relative hidden h-[25rem] w-[25rem] md:block">
+        <div className="relative hidden h-100 w-100 md:block">
           <Image
             src="/team.svg"
             fill
