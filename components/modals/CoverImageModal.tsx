@@ -3,6 +3,7 @@
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
@@ -61,6 +62,9 @@ export const CoverImageModal = () => {
         <DialogHeader>
           <h2 className="text-center text-lg font-semibold">Cover Image</h2>
         </DialogHeader>
+        <DialogDescription className="sr-only">
+          Upload a cover image for your document.
+        </DialogDescription>
         <SingleImageDropzone
           className="w-full outline-hidden"
           disabled={isSubmitting}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import { Button } from "./ui/button";
@@ -11,6 +12,7 @@ import { useParams } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Skeleton } from "./ui/skeleton";
+import { Spinner } from "./spinner";
 
 interface CoverImageProps {
   url?: string;
@@ -19,26 +21,32 @@ interface CoverImageProps {
 
 export const Cover = ({ url, preview }: CoverImageProps) => {
   const { edgestore } = useEdgeStore();
+  const [isRemoving, setIsRemoving] = useState(false);
 
   const params = useParams();
   const coverImage = useCoverImage();
   const removeCoverImage = useMutation(api.documents.removeCoverImage);
 
   const onRemove = async () => {
-    if (url) {
-      await edgestore.publicFiles.delete({
-        url: url,
+    setIsRemoving(true);
+    try {
+      if (url) {
+        await edgestore.publicFiles.delete({
+          url: url,
+        });
+      }
+      await removeCoverImage({
+        id: params.documentId as Id<"documents">,
       });
+    } finally {
+      setIsRemoving(false);
     }
-    removeCoverImage({
-      id: params.documentId as Id<"documents">,
-    });
   };
 
   return (
     <div
       className={cn(
-        "group relative h-[35vh] w-full",
+        "group relative z-10 h-[35vh] w-full",
         !url && "h-[12vh]",
         url && "bg-muted",
       )}
@@ -47,10 +55,10 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
         <Image src={url} fill alt="cover" className="object-cover" priority />
       )}
       {url && !preview && (
-        <div className="absolute bottom-5 right-5 flex items-center gap-x-2 opacity-0 group-hover:opacity-100">
+        <div className="absolute right-5 bottom-5 flex items-center gap-x-2 opacity-0 group-hover:opacity-100">
           <Button
             onClick={() => coverImage.onReplace(url)}
-            className="text-xs text-muted-foreground"
+            className="text-muted-foreground text-xs"
             variant="outline"
             size="sm"
           >
@@ -59,12 +67,19 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
           </Button>
           <Button
             onClick={onRemove}
-            className="text-xs text-muted-foreground"
+            className="text-muted-foreground text-xs"
             variant="outline"
             size="sm"
+            disabled={isRemoving}
           >
-            <X className="mr-2 h-4 w-4" />
-            Remove
+            {isRemoving ? (
+              <Spinner size="sm" />
+            ) : (
+              <>
+                <X className="mr-2 h-4 w-4" />
+                Remove
+              </>
+            )}
           </Button>
         </div>
       )}

@@ -93,7 +93,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
       {!!initialData.icon && !preview && (
         <div
           className={cn(
-            "group/icon flex items-center gap-x-2",
+            "group/icon relative z-10 flex w-max items-center gap-x-2",
             !initialData.coverImage && "pt-6",
             initialData.coverImage && "-mt-8",
           )}
@@ -105,7 +105,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
           </IconPicker>
           <Button
             onClick={onRemoveIcon}
-            className="rounded-full text-xs text-muted-foreground opacity-0 transition group-hover/icon:opacity-100"
+            className="text-muted-foreground rounded-full text-xs opacity-0 transition group-hover/icon:opacity-100"
             variant="outline"
             size="icon"
           >
@@ -128,7 +128,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         {!initialData.icon && !preview && (
           <IconPicker asChild onChange={onIconSelect}>
             <Button
-              className="text-xs text-muted-foreground"
+              className="text-muted-foreground text-xs"
               variant="outline"
               size="sm"
             >
@@ -140,7 +140,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         {!initialData.coverImage && !preview && (
           <Button
             onClick={coverImage.onOpen}
-            className="text-xs text-muted-foreground"
+            className="text-muted-foreground text-xs"
             variant="outline"
             size="sm"
           >
@@ -161,7 +161,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         disabled={preview}
         onChange={(e) => onInput(e.target.value)}
         className={cn(
-          "resize-none wrap-break-word bg-transparent text-5xl font-bold outline-hidden",
+          "w-full resize-none bg-transparent text-5xl font-bold wrap-break-word outline-hidden",
           "text-[#3F3F3F] placeholder:text-gray-300 disabled:cursor-default dark:text-[#CFCFCF]",
           !isEditing && "cursor-pointer",
         )}
