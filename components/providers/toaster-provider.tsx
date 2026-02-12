@@ -8,7 +8,7 @@ export function ToasterProvider() {
 
   return (
     <Toaster
-      className=""
+      richColors
       toastOptions={{
         classNames: {
           toast:
