@@ -23,6 +23,7 @@ import {
   Trash,
 } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import { ActionTooltip } from "@/components/action-tooltip";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -158,13 +159,15 @@ export const Item = ({
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          <div
-            role="button"
-            onClick={onCreate}
-            className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
-          >
-            <Plus className="text-muted-foreground h-4 w-4" />
-          </div>
+          <ActionTooltip label="Add sub-page">
+            <div
+              role="button"
+              onClick={onCreate}
+              className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
+            >
+              <Plus className="text-muted-foreground h-4 w-4" />
+            </div>
+          </ActionTooltip>
         </div>
       )}
     </div>
