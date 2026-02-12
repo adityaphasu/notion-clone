@@ -8,14 +8,14 @@ import { twMerge } from "tailwind-merge";
 import { Spinner } from "./spinner";
 
 const variants = {
-  base: "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out",
+  base: "relative rounded-md flex justify-center items-center flex-col cursor-pointer min-h-[150px] min-w-[200px] border-2 border-dashed border-gray-400 dark:border-gray-300 transition-colors duration-200 ease-in-out",
   image:
     "border-0 p-0 min-h-0 min-w-0 relative shadow-md bg-slate-200 dark:bg-slate-900 rounded-md",
   active: "border-2",
   disabled:
     "bg-gray-200 border-gray-300 cursor-default pointer-events-none bg-opacity-30 dark:bg-gray-700",
-  accept: "border border-blue-500 bg-blue-500 bg-opacity-10",
-  reject: "border border-red-700 bg-red-700 bg-opacity-10",
+  accept: "border-2 border-blue-500 bg-blue-500 bg-opacity-10",
+  reject: "border-2 border-red-700 bg-red-700 bg-opacity-10",
 };
 
 type InputProps = {
@@ -26,6 +26,7 @@ type InputProps = {
   onChange?: (file?: File) => void | Promise<void>;
   disabled?: boolean;
   dropzoneOptions?: Omit<DropzoneOptions, "disabled">;
+  isDragging?: boolean;
 };
 
 const ERROR_MESSAGES = {
@@ -45,7 +46,16 @@ const ERROR_MESSAGES = {
 
 const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
   (
-    { dropzoneOptions, width, height, value, className, disabled, onChange },
+    {
+      dropzoneOptions,
+      width,
+      height,
+      value,
+      className,
+      disabled,
+      onChange,
+      isDragging,
+    },
     ref,
   ) => {
     const imageUrl = React.useMemo(() => {
@@ -90,7 +100,7 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
           disabled && variants.disabled,
           imageUrl && variants.image,
           (isDragReject ?? fileRejections[0]) && variants.reject,
-          isDragAccept && variants.accept,
+          (isDragAccept || isDragging) && variants.accept,
           className,
         ).trim(),
       [
@@ -101,6 +111,7 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         isDragReject,
         disabled,
         className,
+        isDragging,
       ],
     );
 
@@ -124,7 +135,7 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="relative">
         {disabled && (
-          <div className="absolute inset-y-0 z-50 flex h-full w-full items-center justify-center bg-background/80">
+          <div className="bg-background/80 absolute inset-y-0 z-50 flex h-full w-full items-center justify-center">
             <Spinner size="md" />
           </div>
         )}
@@ -151,16 +162,14 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
             // Upload Icon
             <div className="flex flex-col items-center justify-center text-xs text-gray-400">
               <UploadCloudIcon className="mb-2 h-7 w-7" />
-              <div className="text-gray-400">
-                Click or drag to this area to upload
-              </div>
+              <div className="text-gray-400">Click or drag to upload</div>
             </div>
           )}
 
           {/* Remove Image Icon */}
           {imageUrl && !disabled && (
             <div
-              className="group absolute right-0 top-0 -translate-y-1/4 translate-x-1/4 transform"
+              className="group absolute top-0 right-0 translate-x-1/4 -translate-y-1/4 transform"
               onClick={(e) => {
                 e.stopPropagation();
                 void onChange?.(undefined);
@@ -178,7 +187,9 @@ const SingleImageDropzone = React.forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {/* Error Text */}
-        <div className="mt-1 text-xs text-red-500">{errorMessage}</div>
+        <div className="mt-1 text-center text-xs text-red-500">
+          {errorMessage}
+        </div>
       </div>
     );
   },
@@ -193,7 +204,7 @@ const Button = React.forwardRef<
     <button
       className={twMerge(
         // base
-        "inline-flex cursor-pointer items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-hidden focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+        "focus-visible:ring-ring inline-flex cursor-pointer items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:ring-1 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50",
         // color
         "border border-gray-400 text-gray-400 shadow-sm hover:bg-gray-100 hover:text-gray-500 dark:border-gray-600 dark:text-gray-100 dark:hover:bg-gray-700",
         // size

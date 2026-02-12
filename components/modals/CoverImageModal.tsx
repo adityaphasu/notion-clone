@@ -9,12 +9,13 @@ import {
 } from "@/components/ui/dialog";
 import { useCoverImage } from "@/hooks/useCoverImage";
 import { SingleImageDropzone } from "@/components/single-image-dropzone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEdgeStore } from "@/lib/edgestore";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
+import { toast } from "sonner";
 
 export const CoverImageModal = () => {
   const params = useParams();
@@ -25,6 +26,49 @@ export const CoverImageModal = () => {
   const update = useMutation(api.documents.update);
   const coverImage = useCoverImage();
   const { edgestore } = useEdgeStore();
+
+  const [isDragging, setIsDragging] = useState(false);
+
+  useEffect(() => {
+    if (!coverImage.isOpen) return;
+
+    const handleDragOver = (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(true);
+    };
+
+    const handleDragLeave = (e: DragEvent) => {
+      if (e.clientX === 0 && e.clientY === 0) {
+        setIsDragging(false);
+      }
+    };
+
+    const handleDrop = async (e: DragEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      setIsDragging(false);
+
+      const files = e.dataTransfer?.files;
+      if (files?.[0]) {
+        if (!files[0].type.startsWith("image/")) {
+          toast.error("Only image files are allowed.");
+          return;
+        }
+        await onChange(files[0]);
+      }
+    };
+
+    window.addEventListener("dragover", handleDragOver);
+    window.addEventListener("dragleave", handleDragLeave);
+    window.addEventListener("drop", handleDrop);
+
+    return () => {
+      window.removeEventListener("dragover", handleDragOver);
+      window.removeEventListener("dragleave", handleDragLeave);
+      window.removeEventListener("drop", handleDrop);
+    };
+  }, [coverImage.isOpen]);
 
   const onClose = () => {
     setFile(undefined);
@@ -58,7 +102,7 @@ export const CoverImageModal = () => {
       <DialogTitle>
         <span className="sr-only">Change Cover Image</span>
       </DialogTitle>
-      <DialogContent>
+      <DialogContent className="dark:bg-dark">
         <DialogHeader>
           <h2 className="text-center text-lg font-semibold">Cover Image</h2>
         </DialogHeader>
@@ -70,6 +114,7 @@ export const CoverImageModal = () => {
           disabled={isSubmitting}
           value={file}
           onChange={onChange}
+          isDragging={isDragging}
         />
       </DialogContent>
     </Dialog>
