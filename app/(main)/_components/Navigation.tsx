@@ -1,6 +1,12 @@
 "use client";
 
-import React, { ElementRef, useEffect, useRef, useState } from "react";
+import React, {
+  ComponentRef,
+  ElementRef,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { useMutation } from "convex/react";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -41,8 +47,8 @@ const Navigation = () => {
   const create = useMutation(api.documents.create);
 
   const isResizingRef = useRef(false);
-  const sidebarRef = useRef<ElementRef<"aside">>(null);
-  const navbarRef = useRef<ElementRef<"div">>(null);
+  const sidebarRef = useRef<ComponentRef<"aside">>(null);
+  const navbarRef = useRef<ComponentRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
@@ -139,7 +145,7 @@ const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar relative z-300 flex h-full w-60 flex-col overflow-y-auto overflow-x-hidden bg-secondary",
+          "group/sidebar bg-secondary relative z-300 flex h-full w-60 flex-col overflow-x-hidden overflow-y-auto",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "w-0",
         )}
@@ -148,7 +154,7 @@ const Navigation = () => {
           onClick={collapse}
           role="button"
           className={cn(
-            "absolute right-2 top-3 h-6 w-6 rounded-sm text-muted-foreground opacity-0 transition hover:bg-neutral-300 group-hover/sidebar:opacity-100 dark:hover:bg-neutral-600",
+            "text-muted-foreground absolute top-3 right-2 h-6 w-6 rounded-sm opacity-0 transition group-hover/sidebar:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600",
             isMobile && "opacity-100",
           )}
         >
@@ -178,13 +184,13 @@ const Navigation = () => {
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}
-          className="absolute right-0 top-0 h-full w-1 cursor-ew-resize bg-primary/10 opacity-0 transition group-hover/sidebar:opacity-100"
+          className="bg-primary/10 absolute top-0 right-0 h-full w-1 cursor-ew-resize opacity-0 transition group-hover/sidebar:opacity-100"
         ></div>
       </aside>
       <div
         ref={navbarRef}
         className={cn(
-          "absolute left-60 top-0 z-40 w-[calc(100%-240px)]",
+          "absolute top-0 left-60 z-40 w-[calc(100%-240px)]",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "left-0 w-full",
         )}
@@ -204,7 +210,7 @@ const Navigation = () => {
               <MenuIcon
                 onClick={resetWidth}
                 role="button"
-                className="h-6 w-6 text-muted-foreground"
+                className="text-muted-foreground h-6 w-6"
               />
             )}
           </nav>

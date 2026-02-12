@@ -1,6 +1,6 @@
 "use client";
 
-import { ElementRef, useEffect, useRef, useState } from "react";
+import { ComponentRef, ElementRef, useEffect, useRef, useState } from "react";
 
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -20,7 +20,7 @@ interface ToolbarProps {
 }
 
 export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
-  const inputRef = useRef<ElementRef<"textarea">>(null);
+  const inputRef = useRef<ComponentRef<"textarea">>(null);
 
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialData.title);
