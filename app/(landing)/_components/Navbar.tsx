@@ -17,7 +17,7 @@ export const Navbar = () => {
   return (
     <nav
       className={cn(
-        "bg-background sticky inset-x-0 top-0 z-50 mx-auto flex w-full items-center p-6 dark:bg-[#1F1F1F]",
+        "bg-background dark:bg-dark sticky inset-x-0 top-0 z-50 mx-auto flex w-full items-center p-6",
         scrolled && "border-b shadow-xs",
       )}
     >

@@ -29,7 +29,7 @@ export const ConfirmModal = ({ children, onConfirm }: ConfirmmModalProps) => {
       <AlertDialogTrigger onClick={(e) => e.stopPropagation()} asChild>
         {children}
       </AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="dark:bg-dark">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
@@ -42,7 +42,7 @@ export const ConfirmModal = ({ children, onConfirm }: ConfirmmModalProps) => {
           </AlertDialogCancel>
           <AlertDialogAction
             onClick={handleConfirm}
-            className="bg-red-500 hover:bg-red-900"
+            className="bg-red-500 hover:bg-red-900 dark:text-white"
           >
             Confirm
           </AlertDialogAction>
