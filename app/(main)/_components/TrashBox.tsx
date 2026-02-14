@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
-import { Search, Trash, Trash2, Undo } from "lucide-react";
+import { Coffee, Search, Trash, Trash2, Undo } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -96,7 +96,7 @@ export const TrashBox = () => {
         <Input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="h-7 bg-secondary px-2 focus-visible:ring-transparent"
+          className="bg-secondary h-7 px-2 focus-visible:ring-transparent"
           placeholder="Filter by page title..."
           aria-label="Filter by page title"
         />
@@ -117,17 +117,24 @@ export const TrashBox = () => {
       </div>
 
       <div className="mt-2 px-1 pb-1">
-        {filteredDocuments?.length === 0 && (
-          <p className="pb-2 text-center text-xs text-muted-foreground">
-            No documents found.
+        {documents.length === 0 ? (
+          <p className="text-muted-foreground pb-2 text-center text-xs">
+            Trash is empty
+            <Coffee className="mb-1 ml-1 inline-block size-4" />
           </p>
+        ) : (
+          filteredDocuments?.length === 0 && (
+            <p className="text-muted-foreground pb-2 text-center text-xs">
+              No documents found.
+            </p>
+          )
         )}
         {filteredDocuments?.map((document) => (
           <div
             key={document._id}
             role="button"
             onClick={() => onClick(document._id)}
-            className="flex w-full items-center justify-between rounded-sm text-sm text-primary hover:bg-primary/5"
+            className="text-primary hover:bg-primary/5 flex w-full items-center justify-between rounded-sm text-sm"
             aria-label="Document"
           >
             <span className="truncate pl-2">{document.title}</span>
@@ -138,7 +145,7 @@ export const TrashBox = () => {
                   className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                   aria-label="Restore Document"
                 >
-                  <Undo className="h-4 w-4 text-muted-foreground" />
+                  <Undo className="text-muted-foreground h-4 w-4" />
                 </button>
               </ActionTooltip>
               <ConfirmModal onConfirm={() => onRemove(document._id)}>
@@ -148,7 +155,7 @@ export const TrashBox = () => {
                       className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
                       aria-label="Delete Permanently"
                     >
-                      <Trash className="h-4 w-4 text-muted-foreground" />
+                      <Trash className="text-muted-foreground h-4 w-4" />
                     </button>
                   </ActionTooltip>
                 </div>
