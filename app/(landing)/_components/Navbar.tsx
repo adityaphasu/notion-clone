@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Logo } from "./Logo";
 import { ModeToggle } from "@/components/mode-toggle";
 import { useConvexAuth } from "convex/react";
-import { SignInButton, UserButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton, UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/spinner";
 import Link from "next/link";
@@ -32,9 +32,9 @@ export const Navbar = () => {
                   Log In
                 </Button>
               </SignInButton>
-              <SignInButton mode="modal">
+              <SignUpButton mode="modal">
                 <Button size="sm">Get Zotion Free</Button>
-              </SignInButton>
+              </SignUpButton>
             </>
           )}
 

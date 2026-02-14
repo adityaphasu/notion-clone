@@ -2,7 +2,7 @@
 
 import { Spinner } from "@/components/spinner";
 import { Button } from "@/components/ui/button";
-import { SignInButton } from "@clerk/nextjs";
+import { SignInButton, SignUpButton } from "@clerk/nextjs";
 import { useConvexAuth } from "convex/react";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
@@ -34,12 +34,12 @@ export const Heading = () => {
         </Button>
       )}
       {!isAuthenticated && !isLoading && (
-        <SignInButton mode="modal">
+        <SignUpButton mode="modal">
           <Button>
             Get Zotion free
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
-        </SignInButton>
+        </SignUpButton>
       )}
     </div>
   );
