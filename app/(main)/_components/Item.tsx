@@ -121,7 +121,9 @@ export const Item = ({
         </div>
       )}
       {documentIcon ? (
-        <div className="mr-2 shrink-0 text-[1.125rem]">{documentIcon}</div>
+        <div className="mr-1 shrink-0 text-[1.125rem] leading-none">
+          {documentIcon}
+        </div>
       ) : (
         <Icon className="text-muted-foreground mr-2 h-4.5 w-4.5 shrink-0" />
       )}

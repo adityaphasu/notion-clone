@@ -13,8 +13,8 @@ export function ToasterProvider() {
         classNames: {
           toast:
             resolvedTheme === "dark"
-              ? "!bg-[#171717] !text-white"
-              : "!bg-white",
+              ? "bg-[#171717]! text-white!"
+              : "bg-white!",
         },
       }}
       position="bottom-center"
