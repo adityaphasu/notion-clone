@@ -1,12 +1,6 @@
 "use client";
 
-import React, {
-  ComponentRef,
-  ElementRef,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { ComponentRef, useEffect, useRef, useState } from "react";
 import { useMediaQuery } from "usehooks-ts";
 import { useMutation } from "convex/react";
 import { useParams, usePathname, useRouter } from "next/navigation";
@@ -36,6 +30,7 @@ import { TrashBox } from "./TrashBox";
 import { useSearch } from "@/hooks/useSearch";
 import { useSettings } from "@/hooks/useSettings";
 import { Navbar } from "./Navbar";
+import { ScrollableList } from "@/components/scrollable-list";
 
 const Navigation = () => {
   const search = useSearch();
@@ -145,7 +140,7 @@ const Navigation = () => {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar bg-secondary relative z-300 flex h-full w-60 flex-col overflow-x-hidden overflow-y-auto",
+          "group/sidebar bg-secondary relative z-300 flex h-full w-60 flex-col overflow-hidden overflow-x-hidden pb-4",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "w-0",
         )}
@@ -167,15 +162,20 @@ const Navigation = () => {
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
-          <DocumentList />
+          <div>
+            <ScrollableList>
+              <DocumentList />
+            </ScrollableList>
+          </div>
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
           <Popover>
-            <PopoverTrigger className="mt-4 w-full">
+            <PopoverTrigger className="mt-3 w-full">
               <Item label="Trash" icon={Trash} />
             </PopoverTrigger>
             <PopoverContent
               side={isMobile ? "bottom" : "right"}
               className="w-72 p-0"
+              collisionPadding={16}
             >
               <TrashBox />
             </PopoverContent>

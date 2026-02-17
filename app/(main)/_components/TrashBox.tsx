@@ -129,40 +129,42 @@ export const TrashBox = () => {
             </p>
           )
         )}
-        {filteredDocuments?.map((document) => (
-          <div
-            key={document._id}
-            role="button"
-            onClick={() => onClick(document._id)}
-            className="text-primary hover:bg-primary/5 flex w-full items-center justify-between rounded-sm text-sm"
-            aria-label="Document"
-          >
-            <span className="truncate pl-2">{document.title}</span>
-            <div className="flex items-center">
-              <ActionTooltip label="Restore page">
-                <button
-                  onClick={(e) => onRestore(e, document._id)}
-                  className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
-                  aria-label="Restore Document"
-                >
-                  <Undo className="text-muted-foreground h-4 w-4" />
-                </button>
-              </ActionTooltip>
-              <ConfirmModal onConfirm={() => onRemove(document._id)}>
-                <div>
-                  <ActionTooltip label="Delete forever">
-                    <button
-                      className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
-                      aria-label="Delete Permanently"
-                    >
-                      <Trash className="text-muted-foreground h-4 w-4" />
-                    </button>
-                  </ActionTooltip>
-                </div>
-              </ConfirmModal>
+        <div className="max-h-[50vh] overflow-y-auto">
+          {filteredDocuments?.map((document) => (
+            <div
+              key={document._id}
+              role="button"
+              onClick={() => onClick(document._id)}
+              className="text-primary hover:bg-primary/5 flex w-full items-center justify-between rounded-sm text-sm"
+              aria-label="Document"
+            >
+              <span className="truncate pl-2">{document.title}</span>
+              <div className="flex items-center">
+                <ActionTooltip label="Restore page">
+                  <button
+                    onClick={(e) => onRestore(e, document._id)}
+                    className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                    aria-label="Restore Document"
+                  >
+                    <Undo className="text-muted-foreground h-4 w-4" />
+                  </button>
+                </ActionTooltip>
+                <ConfirmModal onConfirm={() => onRemove(document._id)}>
+                  <div>
+                    <ActionTooltip label="Delete forever">
+                      <button
+                        className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                        aria-label="Delete Permanently"
+                      >
+                        <Trash className="text-muted-foreground h-4 w-4" />
+                      </button>
+                    </ActionTooltip>
+                  </div>
+                </ConfirmModal>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </section>
   );
