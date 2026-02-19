@@ -14,6 +14,8 @@ export const ScrollableList = ({
   className,
 }: ScrollableListProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
+
   const [canScrollUp, setCanScrollUp] = useState(false);
   const [canScrollDown, setCanScrollDown] = useState(false);
 
@@ -28,15 +30,28 @@ export const ScrollableList = ({
   };
 
   useEffect(() => {
+    const contentElement = contentRef.current;
+    if (!contentElement) return;
+
+    const observer = new ResizeObserver(() => {
+      window.requestAnimationFrame(() => {
+        checkForScroll();
+      });
+    });
+
+    observer.observe(contentElement);
+
     checkForScroll();
-  }, [children]);
+
+    return () => observer.disconnect();
+  }, []);
 
   const scrollBy = (amount: number) => {
     scrollRef.current?.scrollBy({ top: amount, behavior: "smooth" });
   };
 
   return (
-    <div className="relative">
+    <div className="relative h-full">
       <div
         className={cn(
           "from-secondary absolute top-0 right-0 left-0 z-10 mr-1 flex h-6 items-center justify-center bg-linear-to-b to-transparent transition-opacity duration-300",
@@ -60,7 +75,7 @@ export const ScrollableList = ({
           className,
         )}
       >
-        {children}
+        <div ref={contentRef}>{children}</div>
       </div>
 
       <div
