@@ -37,13 +37,16 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
 
   const disableInput = () => {
     setIsEditing(false);
+    if (value === "") {
+      setValue(initialData.title || "Untitled");
+    }
   };
 
   useEffect(() => {
     if (!isEditing) {
       setValue(initialData.title);
     }
-  }, [initialData.title, isEditing]);
+  }, [initialData.title]);
 
   useEffect(() => {
     if (value === initialData.title) return;
