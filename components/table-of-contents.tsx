@@ -22,8 +22,10 @@ interface TableOfContentsProps {
 export const TableOfContents = ({ editor }: TableOfContentsProps) => {
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [observerHeadingId, setObserverHeadingId] = useState<string | null>(
+    null,
+  );
   const [open, setOpen] = useState(false);
-  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     if (!editor) return;
@@ -62,6 +64,35 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
     return () => unsubscribe();
   }, [editor]);
 
+  useEffect(() => {
+    if (!headings.length) return;
+
+    const observers: IntersectionObserver[] = [];
+
+    headings.forEach((heading) => {
+      const el = document.querySelector(`[data-id="${heading.id}"]`);
+      if (!el) return;
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setObserverHeadingId(heading.id);
+          }
+        },
+        {
+          root: null,
+          rootMargin: "-20% 0px -70% 0px",
+          threshold: 0,
+        },
+      );
+
+      observer.observe(el);
+      observers.push(observer);
+    });
+
+    return () => observers.forEach((o) => o.disconnect());
+  }, [headings]);
+
   const handleClick = (id: string) => {
     setActiveId(id);
     const el = document.querySelector(`[data-id="${id}"]`);
@@ -71,14 +102,11 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
   };
 
   const handleMouseEnter = () => {
-    if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     setOpen(true);
   };
 
   const handleMouseLeave = () => {
-    closeTimeoutRef.current = setTimeout(() => {
-      setOpen(false);
-    }, 200);
+    setOpen(false);
   };
 
   if (!headings.length) return null;
@@ -88,21 +116,20 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div
-            className="flex cursor-default flex-col items-center gap-1.5 px-1.5 py-3"
+            className="flex cursor-default flex-col items-center gap-2 px-1.5 py-3"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
             {headings.map((heading) => (
-              <button
+              <span
                 key={heading.id}
-                onClick={() => handleClick(heading.id)}
                 title={heading.text}
                 className={cn(
-                  "bg-muted-foreground/40 hover:bg-muted-foreground/80 rounded-full transition-all duration-150 hover:scale-110",
+                  "bg-muted-foreground/40 hover:bg-muted-foreground/80 rounded-full transition-all duration-150",
                   heading.level === 1 && "h-0.75 w-6",
-                  heading.level === 2 && "h-0.75 w-4",
-                  heading.level === 3 && "h-0.75 w-3",
-                  activeId === heading.id && "bg-primary/80",
+                  heading.level === 2 && "h-0.75 w-5",
+                  heading.level === 3 && "h-0.75 w-4",
+                  observerHeadingId === heading.id && "bg-primary/80",
                 )}
               />
             ))}
@@ -111,15 +138,15 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
         <PopoverContent
           side="left"
           align="center"
-          sideOffset={8}
-          className="w-56 p-3"
+          sideOffset={-30}
+          className="w-56 px-1 py-3"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
-          <p className="text-muted-foreground mb-2 text-[10px] font-semibold tracking-widest uppercase">
+          <p className="text-muted-foreground mb-2 px-2 text-[10px] font-semibold tracking-widest uppercase">
             Page Navigation
           </p>
-          <div className="flex flex-col gap-0.5">
+          <div className="max-h-[50vh] space-y-0.5 overflow-y-auto">
             {headings.map((heading) => (
               <button
                 key={heading.id}

@@ -11,7 +11,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { BlockNoteEditor } from "@blocknote/core";
-import { TableOfContents } from "@/components/ui/table-of-contents";
+import { TableOfContents } from "@/components/table-of-contents";
 
 interface DocumentIdPageProps {
   params: Promise<{
