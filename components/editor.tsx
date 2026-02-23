@@ -14,11 +14,13 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { codeBlockOptions } from "@blocknote/code-block";
 import "@blocknote/core/style.css";
 import "@blocknote/mantine/style.css";
+import { useEffect } from "react";
 
 interface EditorProps {
   onChange: (value: string) => void;
   initialContent?: string;
   editable?: boolean;
+  onEditorReady?: (editor: BlockNoteEditor) => void;
 }
 
 const schema = BlockNoteSchema.create().extend({
@@ -42,7 +44,12 @@ const schema = BlockNoteSchema.create().extend({
   },
 });
 
-const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
+const Editor = ({
+  onChange,
+  initialContent,
+  editable,
+  onEditorReady,
+}: EditorProps) => {
   const { resolvedTheme } = useTheme();
 
   const { edgestore } = useEdgeStore();
@@ -64,6 +71,12 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
     schema,
   });
 
+  useEffect(() => {
+    if (editor && onEditorReady) {
+      onEditorReady(editor);
+    }
+  }, [editor]);
+
   const handleEditorChange = () => {
     onChange(JSON.stringify(editor.document, null, 2));
   };
@@ -77,7 +90,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
 
   return (
     <div
-      className="relative"
+      className="relative flex-1 shrink-0"
       onDropCapture={handleCapture}
       onDragOverCapture={handleCapture}
     >
@@ -86,6 +99,7 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
         editor={editor}
         theme={resolvedTheme === "dark" ? "dark" : "light"}
         onChange={handleEditorChange}
+        className="wrap-break-word"
       />
     </div>
   );

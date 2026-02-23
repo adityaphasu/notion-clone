@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, use } from "react";
+import { useMemo, use, useState } from "react";
 
 import { Cover } from "@/components/cover";
 import { Toolbar } from "@/components/toolbar";
@@ -10,6 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
+import { BlockNoteEditor } from "@blocknote/core";
+import { TableOfContents } from "@/components/ui/table-of-contents";
 
 interface DocumentIdPageProps {
   params: Promise<{
@@ -19,6 +21,7 @@ interface DocumentIdPageProps {
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const { documentId } = use(params);
+  const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
 
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
@@ -63,7 +66,12 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
       <Cover url={document.coverImage} />
       <div className="relative mx-auto md:w-[90%]">
         <Toolbar initialData={document} />
-        <Editor onChange={onChange} initialContent={document.content} />
+        <Editor
+          onChange={onChange}
+          initialContent={document.content}
+          onEditorReady={setEditor}
+        />
+        <TableOfContents editor={editor} />
       </div>
     </div>
   );
