@@ -62,7 +62,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   }
 
   return (
-    <div className="pb-40">
+    <div className="pb-35">
       <Cover url={document.coverImage} />
       <div className="relative mx-auto md:w-[90%]">
         <Toolbar initialData={document} />
