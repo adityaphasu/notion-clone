@@ -8,11 +8,12 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SignOutButton, useUser } from "@clerk/nextjs";
-import { ChevronsLeftRight } from "lucide-react";
+import { SignOutButton, useClerk, useUser } from "@clerk/nextjs";
+import { ChevronsLeftRight, LogOut, Settings } from "lucide-react";
 
 export const UserItem = () => {
   const { user } = useUser();
+  const { openUserProfile } = useClerk();
 
   return (
     <DropdownMenu>
@@ -60,7 +61,21 @@ export const UserItem = () => {
           asChild
           className="text-muted-foreground w-full cursor-pointer"
         >
-          <SignOutButton>Log Out</SignOutButton>
+          <button onClick={() => openUserProfile()}>
+            <Settings className="text-muted-foreground size-4" />
+            Manage Account
+          </button>
+        </DropdownMenuItem>
+
+        <DropdownMenuItem asChild className="group w-full cursor-pointer">
+          <SignOutButton>
+            <button>
+              <LogOut className="text-muted-foreground size-4" />
+              <span className="text-muted-foreground transition-colors group-hover:text-black! hover:text-black">
+                Log Out
+              </span>
+            </button>
+          </SignOutButton>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
