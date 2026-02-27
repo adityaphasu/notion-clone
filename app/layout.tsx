@@ -8,6 +8,7 @@ import { ModalProvider } from "@/components/providers/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ToasterProvider } from "@/components/providers/toaster-provider";
+import { shadcn } from "@clerk/themes";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -39,7 +40,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ClerkProvider>
+        <ClerkProvider
+          appearance={{
+            theme: shadcn,
+          }}
+        >
           <ConvexClientProvider>
             <EdgeStoreProvider>
               <ThemeProvider
