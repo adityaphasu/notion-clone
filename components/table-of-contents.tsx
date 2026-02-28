@@ -22,10 +22,34 @@ interface TableOfContentsProps {
 export const TableOfContents = ({ editor }: TableOfContentsProps) => {
   const [headings, setHeadings] = useState<HeadingItem[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [observerHeadingId, setObserverHeadingId] = useState<string | null>(
-    null,
-  );
   const [open, setOpen] = useState(false);
+  const [canScroll, setCanScroll] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+
+  const SEGMENTS = 10;
+  const filledSegments = Math.round(scrollProgress * SEGMENTS);
+
+  useEffect(() => {
+    const container = document.querySelector("main");
+    if (!container) return;
+
+    const handleScroll = () => {
+      const scrollTop = container.scrollTop;
+      const docHeight = container.scrollHeight - container.clientHeight;
+      setCanScroll(docHeight > 0);
+      const progress = docHeight > 0 ? scrollTop / docHeight : 0;
+      setScrollProgress(progress);
+    };
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    const resizeObserver = new ResizeObserver(handleScroll);
+    resizeObserver.observe(container);
+
+    return () => {
+      container.removeEventListener("scroll", handleScroll);
+      resizeObserver.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     if (!editor) return;
@@ -64,35 +88,6 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
     return () => unsubscribe();
   }, [editor]);
 
-  useEffect(() => {
-    if (!headings.length) return;
-
-    const observers: IntersectionObserver[] = [];
-
-    headings.forEach((heading) => {
-      const el = document.querySelector(`[data-id="${heading.id}"]`);
-      if (!el) return;
-
-      const observer = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setObserverHeadingId(heading.id);
-          }
-        },
-        {
-          root: null,
-          rootMargin: "-20% 0px -70% 0px",
-          threshold: 0,
-        },
-      );
-
-      observer.observe(el);
-      observers.push(observer);
-    });
-
-    return () => observers.forEach((o) => o.disconnect());
-  }, [headings]);
-
   const handleClick = (id: string) => {
     setActiveId(id);
     const el = document.querySelector(`[data-id="${id}"]`);
@@ -109,27 +104,25 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
     setOpen(false);
   };
 
-  if (!headings.length) return null;
+  if (!headings.length || !canScroll) return null;
 
   return (
     <div className="fixed top-1/2 right-5 z-50 -translate-y-1/2">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div
-            className="flex cursor-default flex-col items-center gap-2 px-1.5 py-3"
+            className="flex cursor-default flex-col items-center gap-4 px-1.5 py-3"
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
           >
-            {headings.map((heading) => (
-              <span
-                key={heading.id}
-                title={heading.text}
+            {Array.from({ length: SEGMENTS }).map((_, i) => (
+              <div
+                key={i}
                 className={cn(
-                  "bg-muted-foreground/40 hover:bg-muted-foreground/80 rounded-full transition-all duration-150",
-                  heading.level === 1 && "h-0.75 w-6",
-                  heading.level === 2 && "h-0.75 w-5",
-                  heading.level === 3 && "h-0.75 w-4",
-                  observerHeadingId === heading.id && "bg-primary/80",
+                  "h-1 w-5 rounded-full transition-all duration-200",
+                  i < filledSegments
+                    ? "bg-primary scale-115"
+                    : "bg-muted-foreground/40 scale-100",
                 )}
               />
             ))}
