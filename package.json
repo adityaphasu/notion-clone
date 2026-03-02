@@ -9,10 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@blocknote/code-block": "^0.46.1",
-    "@blocknote/core": "^0.45.0",
-    "@blocknote/mantine": "^0.45.0",
-    "@blocknote/react": "^0.45.0",
+    "@blocknote/code-block": "^0.47.1",
+    "@blocknote/core": "^0.47.1",
+    "@blocknote/mantine": "^0.47.1",
+    "@blocknote/react": "^0.47.1",
     "@clerk/nextjs": "^6.37.3",
     "@clerk/themes": "^2.4.56",
     "@dnd-kit/core": "^6.3.1",
