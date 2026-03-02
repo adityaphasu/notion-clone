@@ -43,7 +43,24 @@ const schema = BlockNoteSchema.create().extend({
     }),
   },
 });
+
 const MEDIA_BLOCK_TYPES = new Set(["image", "video", "audio", "file"]);
+
+const getMediaUrls = (editor: BlockNoteEditor): Set<string> => {
+  const urls = new Set<string>();
+
+  editor.forEachBlock((block) => {
+    if (MEDIA_BLOCK_TYPES.has(block.type)) {
+      const url = (block.props as any)?.url;
+      if (url && typeof url === "string" && url.trim() !== "") {
+        urls.add(url);
+      }
+    }
+    return true;
+  });
+
+  return urls;
+};
 
 const Editor = ({
   onChange,
@@ -53,8 +70,11 @@ const Editor = ({
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const { edgestore } = useEdgeStore();
+
   const coverImage = useCoverImage();
+
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const trackedUrlsRef = useRef<Set<string>>(new Set());
 
   const handleUpload = async (file: File) => {
     const res = await edgestore.publicFiles.upload({ file });
@@ -70,12 +90,29 @@ const Editor = ({
   });
 
   useEffect(() => {
+    if (editor) {
+      trackedUrlsRef.current = getMediaUrls(editor);
+    }
     if (editor && onEditorReady) {
       onEditorReady(editor);
     }
   }, [editor]);
 
   const handleEditorChange = () => {
+    const currentUrls = getMediaUrls(editor);
+    const previousUrls = trackedUrlsRef.current;
+
+    const removedUrls = [...previousUrls].filter(
+      (url) => !currentUrls.has(url),
+    );
+
+    removedUrls.forEach((url) => {
+      edgestore.publicFiles.delete({ url }).catch((err) => {
+        console.warn("Failed to delete file in edgestore:", url, err);
+      });
+    });
+    trackedUrlsRef.current = currentUrls;
+
     onChange(JSON.stringify(editor.document, null, 2));
   };
 
@@ -89,8 +126,7 @@ const Editor = ({
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!editable || coverImage.isOpen) return;
 
-    const target = e.target as HTMLElement;
-    const blockEl = target.closest<HTMLElement>(
+    const blockEl = (e.target as HTMLElement).closest<HTMLElement>(
       "[data-node-type='blockContainer']",
     );
     if (!blockEl) return;
@@ -98,17 +134,14 @@ const Editor = ({
     const blockId = blockEl.getAttribute("data-id");
     if (!blockId) return;
 
-    const blocks = editor.document;
-    const blockIndex = blocks.findIndex((b) => b.id === blockId);
-    if (blockIndex < 1) return;
-
-    const prevBlock = blocks[blockIndex - 1];
-    const thisBlock = blocks[blockIndex];
+    const currentBlock = editor.getBlock(blockId);
+    if (!currentBlock) return;
+    const prevBlock = editor.getPrevBlock(blockId);
+    if (!prevBlock) return;
 
     if (
       !MEDIA_BLOCK_TYPES.has(prevBlock?.type as string) ||
-      thisBlock?.type !== "paragraph" ||
-      (thisBlock.content as any[])?.length !== 0
+      (currentBlock.content as any[])?.length !== 0
     ) {
       return;
     }
