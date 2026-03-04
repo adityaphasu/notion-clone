@@ -300,6 +300,7 @@ export const update = mutation({
 
     const document = await ctx.db.patch(args.id, {
       ...rest,
+      updatedAt: Date.now(),
     });
 
     return document;
@@ -329,6 +330,7 @@ export const removeIcon = mutation({
 
     const document = await ctx.db.patch(args.id, {
       icon: undefined,
+      updatedAt: Date.now(),
     });
 
     return document;
@@ -358,6 +360,7 @@ export const removeCoverImage = mutation({
 
     const document = await ctx.db.patch(args.id, {
       coverImage: undefined,
+      updatedAt: Date.now(),
     });
 
     return document;
