@@ -5,7 +5,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { useParams, useRouter } from "next/navigation";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { toast } from "sonner";
 import {
   DropdownMenu,
@@ -22,7 +22,7 @@ import {
   Plus,
   Trash,
 } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
+
 import { ActionTooltip } from "@/components/action-tooltip";
 
 interface ItemProps {
@@ -50,11 +50,14 @@ export const Item = ({
   onExpand,
   expanded,
 }: ItemProps) => {
-  const { user } = useUser();
   const router = useRouter();
   const params = useParams();
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.documents.archive);
+  const document = useQuery(
+    api.documents.getById,
+    id ? { documentId: id } : "skip",
+  );
 
   const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
@@ -146,7 +149,7 @@ export const Item = ({
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-60"
+              className="w-65"
               align="start"
               side="right"
               forceMount
@@ -157,7 +160,19 @@ export const Item = ({
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <div className="text-muted-foreground p-2 text-xs">
-                Last edited by: {user?.fullName}
+                Last edited on{" "}
+                {document
+                  ? new Date(
+                      document.updatedAt ?? document._creationTime,
+                    ).toLocaleString("en-US", {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: true,
+                    })
+                  : "..."}
               </div>
             </DropdownMenuContent>
           </DropdownMenu>

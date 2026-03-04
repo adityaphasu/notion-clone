@@ -2,8 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { Id } from "@/convex/_generated/dataModel";
-import { useUser } from "@clerk/nextjs";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 import {
@@ -23,9 +22,11 @@ interface MenuProps {
 
 export const Menu = ({ documentId }: MenuProps) => {
   const router = useRouter();
-  const { user } = useUser();
 
   const archive = useMutation(api.documents.archive);
+  const document = useQuery(api.documents.getById, {
+    documentId,
+  });
 
   const onArchive = () => {
     const promise = archive({ id: documentId });
@@ -47,7 +48,7 @@ export const Menu = ({ documentId }: MenuProps) => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent
-        className="w-60"
+        className="w-65"
         align="end"
         alignOffset={8}
         forceMount
@@ -58,7 +59,19 @@ export const Menu = ({ documentId }: MenuProps) => {
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="text-muted-foreground p-2 text-xs">
-          Last edited by {user?.fullName}
+          Last edited on{" "}
+          {document
+            ? new Date(
+                document.updatedAt ?? document._creationTime,
+              ).toLocaleString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
+            : "..."}
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
