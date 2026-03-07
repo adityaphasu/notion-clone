@@ -139,17 +139,22 @@ const Editor = ({
     const prevBlock = editor.getPrevBlock(blockId);
     if (!prevBlock) return;
 
-    if (
-      !MEDIA_BLOCK_TYPES.has(prevBlock?.type as string) ||
-      (currentBlock.content as any[])?.length !== 0
-    ) {
-      return;
-    }
+    if (!MEDIA_BLOCK_TYPES.has(prevBlock?.type as string)) return;
 
-    e.preventDefault();
     e.stopPropagation();
 
-    editor.setTextCursorPosition(blockId, "end");
+    const view = (editor as any)._tiptapEditor.view;
+    const pos = view.posAtCoords({ left: e.clientX, top: e.clientY });
+
+    if (pos) {
+      view.dispatch(
+        view.state.tr.setSelection(
+          view.state.selection.constructor.near(
+            view.state.doc.resolve(pos.pos),
+          ),
+        ),
+      );
+    }
     editor.focus();
   };
 
