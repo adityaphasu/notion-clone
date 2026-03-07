@@ -156,6 +156,10 @@
   .bn-color-picker-dropdown {
     top: -110px !important;
   }
+
+  .bn-side-menu {
+    margin-right: 0.75rem !important;
+  }
 }
 
 @layer base {
