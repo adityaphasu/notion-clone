@@ -161,7 +161,7 @@ const Editor = ({
   return (
     <div
       ref={wrapperRef}
-      className="relative flex-1 shrink-0"
+      className="relative flex-1 shrink-0 pb-10"
       onDropCapture={handleCapture}
       onDragOverCapture={handleCapture}
       onMouseDown={handleMouseDown}

@@ -160,6 +160,11 @@
   .bn-side-menu {
     margin-right: 0.75rem !important;
   }
+
+  .bn-suggestion-menu {
+    max-height: 55vh !important;
+    overflow-y: auto !important;
+  }
 }
 
 @layer base {
