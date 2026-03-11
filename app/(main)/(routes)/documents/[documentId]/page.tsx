@@ -1,7 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { useMemo, use, useState } from "react";
+import { useMemo, use, useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 
 import { Cover } from "@/components/cover";
 import { Toolbar } from "@/components/toolbar";
@@ -22,6 +23,7 @@ interface DocumentIdPageProps {
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const { documentId } = use(params);
   const [editor, setEditor] = useState<BlockNoteEditor | null>(null);
+  const { resolvedTheme } = useTheme();
 
   const Editor = useMemo(
     () => dynamic(() => import("@/components/editor"), { ssr: false }),
@@ -33,6 +35,29 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   });
 
   const update = useMutation(api.documents.update);
+
+  useEffect(() => {
+    if (!document) return;
+
+    const defaultFavicon =
+      resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg";
+
+    window.document.title = `${document.title || "Untitled"} | Zotion`;
+
+    const link = window.document.querySelector(
+      "link[rel~='icon']",
+    ) as HTMLLinkElement;
+    if (link) {
+      link.href = document.icon
+        ? `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='100'>${document.icon}</text></svg>`
+        : defaultFavicon;
+    }
+
+    return () => {
+      window.document.title = "Zotion";
+      if (link) link.href = defaultFavicon;
+    };
+  }, [document?.title, document?.icon, resolvedTheme]);
 
   const onChange = (content: string) => {
     update({
