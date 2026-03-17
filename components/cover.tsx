@@ -33,15 +33,17 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
       await removeCoverImage({
         id: params.documentId as Id<"documents">,
       });
-      if (url) {
-        await edgestore.publicFiles.delete({
-          url: url,
-        });
+      if (url && url.startsWith("http")) {
+        await edgestore.publicFiles.delete({ url });
       }
+    } catch (err) {
+      console.error("Failed to remove cover image:", err);
     } finally {
       setIsRemoving(false);
     }
   };
+
+  const isUrl = url?.startsWith("http");
 
   return (
     <div
@@ -51,9 +53,12 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
         url && "bg-muted",
       )}
     >
-      {!!url && (
-        <Image src={url} fill alt="cover" className="object-cover" priority />
-      )}
+      {!!url &&
+        (isUrl ? (
+          <Image src={url} fill alt="cover" className="object-cover" priority />
+        ) : (
+          <div className="h-full w-full" style={{ background: url }} />
+        ))}
       {url && !preview && (
         <div className="absolute right-5 bottom-5 flex items-center gap-x-2 opacity-0 group-hover:opacity-100">
           <Button
