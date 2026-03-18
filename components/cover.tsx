@@ -63,7 +63,7 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
         <div className="absolute right-5 bottom-5 flex items-center gap-x-2 opacity-0 group-hover:opacity-100">
           <Button
             onClick={() => coverImage.onReplace(url)}
-            className="text-muted-foreground text-xs"
+            className="text-muted-foreground dark:bg-dark dark:hover:bg-dark/80 text-xs"
             variant="outline"
             size="sm"
           >
@@ -72,7 +72,7 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
           </Button>
           <Button
             onClick={onRemove}
-            className="text-muted-foreground text-xs"
+            className="text-muted-foreground dark:bg-dark dark:hover:bg-dark/80 text-xs"
             variant="outline"
             size="sm"
             disabled={isRemoving}
