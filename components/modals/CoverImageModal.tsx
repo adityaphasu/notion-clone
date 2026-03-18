@@ -125,6 +125,9 @@ export const CoverImageModal = () => {
   };
 
   const onSelectColor = async (color: string) => {
+    if (coverImage.url?.startsWith("http")) {
+      await edgestore.publicFiles.delete({ url: coverImage.url });
+    }
     await update({
       id: params.documentId as Id<"documents">,
       coverImage: color,
