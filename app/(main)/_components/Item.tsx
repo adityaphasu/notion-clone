@@ -20,6 +20,7 @@ import {
   LucideIcon,
   MoreHorizontal,
   Plus,
+  Star,
   Trash,
 } from "lucide-react";
 
@@ -36,6 +37,8 @@ interface ItemProps {
   label: string;
   onClick?: () => void;
   icon: LucideIcon;
+  isFavorite?: boolean;
+  onFavorite?: () => void;
 }
 
 export const Item = ({
@@ -49,6 +52,8 @@ export const Item = ({
   level = 0,
   onExpand,
   expanded,
+  isFavorite,
+  onFavorite,
 }: ItemProps) => {
   const router = useRouter();
   const params = useParams();
@@ -139,6 +144,15 @@ export const Item = ({
       )}
       {!!id && (
         <div className="ml-auto flex items-center gap-x-2">
+          <ActionTooltip label="Add sub-page">
+            <div
+              role="button"
+              onClick={onCreate}
+              className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
+            >
+              <Plus className="text-muted-foreground h-4 w-4" />
+            </div>
+          </ActionTooltip>
           <DropdownMenu>
             <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
               <div
@@ -154,6 +168,20 @@ export const Item = ({
               side="right"
               forceMount
             >
+              <DropdownMenuItem
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onFavorite?.();
+                }}
+              >
+                <Star
+                  className={cn(
+                    "mr-2 h-4 w-4",
+                    isFavorite && "fill-yellow-400 text-yellow-400",
+                  )}
+                />
+                {isFavorite ? "Remove from favorites" : "Add to favorites"}
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={onArchive}>
                 <Trash className="mr-2 h-4 w-4" />
                 Delete
@@ -176,15 +204,6 @@ export const Item = ({
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          <ActionTooltip label="Add sub-page">
-            <div
-              role="button"
-              onClick={onCreate}
-              className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
-            >
-              <Plus className="text-muted-foreground h-4 w-4" />
-            </div>
-          </ActionTooltip>
         </div>
       )}
     </div>

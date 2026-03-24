@@ -13,6 +13,7 @@ export default defineSchema({
     isPublished: v.boolean(),
     order: v.optional(v.number()),
     updatedAt: v.optional(v.number()),
+    isFavorite: v.optional(v.boolean()),
   })
     .index("by_user", ["userId"])
     .index("by_user_parent", ["userId", "parentDocument"]),

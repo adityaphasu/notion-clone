@@ -75,7 +75,9 @@ export const ScrollableList = ({
           className,
         )}
       >
-        <div ref={contentRef}>{children}</div>
+        <div ref={contentRef} className="space-y-2">
+          {children}
+        </div>
       </div>
 
       <div

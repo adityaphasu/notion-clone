@@ -26,13 +26,13 @@ import {
 } from "@dnd-kit/modifiers";
 import { CSS } from "@dnd-kit/utilities";
 
-import { cn } from "@/lib/utils";
 import { api } from "@/convex/_generated/api";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 
 import { Item } from "./Item";
 
 import { FileIcon } from "lucide-react";
+import { toast } from "sonner";
 
 interface SortableItemProps {
   document: Doc<"documents">;
@@ -41,6 +41,8 @@ interface SortableItemProps {
   expanded: boolean;
   onRedirect: (id: string) => void;
   activeId?: string | string[];
+  isFavorite?: boolean;
+  onFavorite?: (id: Id<"documents">) => void;
 }
 interface DocumentListProps {
   parentDocumentId?: Id<"documents">;
@@ -55,6 +57,7 @@ const SortableItem = ({
   expanded,
   onRedirect,
   activeId,
+  onFavorite,
 }: SortableItemProps) => {
   const {
     attributes,
@@ -86,6 +89,8 @@ const SortableItem = ({
         level={level}
         onExpand={() => onExpand(document._id)}
         expanded={expanded}
+        isFavorite={document.isFavorite}
+        onFavorite={() => onFavorite?.(document._id)}
       />
       {expanded && (
         <DocumentList parentDocumentId={document._id} level={level + 1} />
@@ -100,7 +105,10 @@ export const DocumentList = ({
 }: DocumentListProps) => {
   const params = useParams();
   const router = useRouter();
+
   const reorder = useMutation(api.documents.reorder);
+  const toggleFavorite = useMutation(api.documents.toggleFavorite);
+
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [isDragging, setIsDragging] = useState(false);
   const [orderedDocuments, setOrderedDocuments] = useState<Doc<"documents">[]>(
@@ -162,6 +170,15 @@ export const DocumentList = ({
     }
   };
 
+  const onToggleFavorite = (id: Id<"documents">) => {
+    const promise = toggleFavorite({ id });
+    toast.promise(promise, {
+      loading: "Updating favorites...",
+      success: "Favorites updated!",
+      error: "Failed to update favorites.",
+    });
+  };
+
   const onRedirect = (documentId: string) => {
     router.push(`/documents/${documentId}`);
   };
@@ -185,7 +202,7 @@ export const DocumentList = ({
       {orderedDocuments.length === 0 && level !== 0 && (
         <p
           style={{ paddingLeft: level ? `${level * 12 + 25}px` : undefined }}
-          className="py-1 text-sm font-medium text-muted-foreground/80"
+          className="text-muted-foreground/80 py-1 text-sm font-medium"
         >
           No pages inside
         </p>
@@ -211,6 +228,8 @@ export const DocumentList = ({
               expanded={expanded[document._id]}
               onRedirect={onRedirect}
               activeId={params.documentId}
+              isFavorite={document.isFavorite}
+              onFavorite={onToggleFavorite}
             />
           ))}
         </SortableContext>

@@ -31,6 +31,7 @@ import { useSearch } from "@/hooks/useSearch";
 import { useSettings } from "@/hooks/useSettings";
 import { Navbar } from "./Navbar";
 import { ScrollableList } from "@/components/scrollable-list";
+import { FavoritesList } from "./FavoritesList";
 
 const Navigation = () => {
   const search = useSearch();
@@ -164,7 +165,13 @@ const Navigation = () => {
         <div className="mt-4">
           <div>
             <ScrollableList>
-              <DocumentList />
+              <FavoritesList />
+              <div>
+                <p className="text-muted-foreground/60 px-3 py-1 text-xs font-medium">
+                  Notes
+                </p>
+                <DocumentList />
+              </div>
             </ScrollableList>
           </div>
           <Item onClick={handleCreate} icon={Plus} label="Add a page" />
