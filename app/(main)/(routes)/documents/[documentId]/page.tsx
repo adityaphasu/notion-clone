@@ -30,26 +30,26 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     [],
   );
 
-  const document = useQuery(api.documents.getById, {
+  const doc = useQuery(api.documents.getById, {
     documentId: documentId,
   });
 
   const update = useMutation(api.documents.update);
 
   useEffect(() => {
-    if (!document) return;
+    if (!doc) return;
 
     const defaultFavicon =
       resolvedTheme === "dark" ? "/logo-dark.svg" : "/logo.svg";
 
-    window.document.title = `${document.title || "Untitled"} | Zotion`;
+    window.document.title = `${doc.title || "Untitled"} | Zotion`;
 
     const link = window.document.querySelector(
       "link[rel~='icon']",
     ) as HTMLLinkElement;
     if (link) {
-      link.href = document.icon
-        ? `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='100'>${document.icon}</text></svg>`
+      link.href = doc.icon
+        ? `data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50%' y='50%' dominant-baseline='central' text-anchor='middle' font-size='100'>${doc.icon}</text></svg>`
         : defaultFavicon;
     }
 
@@ -57,7 +57,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
       window.document.title = "Zotion";
       if (link) link.href = defaultFavicon;
     };
-  }, [document?.title, document?.icon, resolvedTheme]);
+  }, [doc, resolvedTheme, documentId]);
 
   const onChange = (content: string) => {
     update({
@@ -66,7 +66,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     });
   };
 
-  if (document === undefined) {
+  if (doc === undefined) {
     return (
       <div>
         <Cover.Skeleton />
@@ -82,18 +82,18 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     );
   }
 
-  if (document === null) {
+  if (doc === null) {
     return <div>Not found</div>;
   }
 
   return (
     <div className="pb-35">
-      <Cover url={document.coverImage} />
+      <Cover url={doc.coverImage} />
       <div className="relative mx-auto md:w-[90%]">
-        <Toolbar initialData={document} />
+        <Toolbar initialData={doc} />
         <Editor
           onChange={onChange}
-          initialContent={document.content}
+          initialContent={doc.content}
           onEditorReady={setEditor}
         />
         <TableOfContents editor={editor} />
