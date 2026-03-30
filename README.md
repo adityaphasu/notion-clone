@@ -15,6 +15,7 @@ Zotion - [https://zotion-app.vercel.app/](https://zotion-app.vercel.app/)
 - 📝 Notion-style editor for seamless note-taking
 - 📂 Infinite children documents for hierarchical organization
 - 🖐️ Drag-and-drop reordering for intuitive file management
+- ⭐ Pin important documents for quick access
 - ➡️🔀⬅️ Expandable and fully collapsible sidebar for easy navigation
 - 🎨 Customizable icons for each document, updating in real-time
 - 🗑️ Trash can with soft delete and file recovery options
