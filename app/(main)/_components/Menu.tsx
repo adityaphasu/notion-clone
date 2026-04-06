@@ -58,20 +58,32 @@ export const Menu = ({ documentId }: MenuProps) => {
           Delete
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <div className="text-muted-foreground p-2 text-xs">
-          Last edited on{" "}
-          {document
-            ? new Date(
-                document.updatedAt ?? document._creationTime,
-              ).toLocaleString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-                hour12: true,
-              })
-            : "..."}
+        <div className="space-y-1 p-2 text-xs">
+          <p className="text-muted-foreground">
+            Last edited on{" "}
+            {document
+              ? new Date(
+                  document.updatedAt ?? document._creationTime,
+                ).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  hour12: true,
+                })
+              : "..."}
+          </p>
+          <p className="text-muted-foreground/70">
+            Created on{" "}
+            {document
+              ? new Date(document._creationTime).toLocaleString("en-US", {
+                  month: "short",
+                  day: "numeric",
+                  year: "numeric",
+                })
+              : "..."}
+          </p>
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

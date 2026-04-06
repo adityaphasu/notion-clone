@@ -139,7 +139,7 @@ export const Item = ({
       <span className="truncate">{label}</span>
       {isSearch && (
         <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none dark:bg-neutral-700">
-          <span className="text-xs">CTRL</span>K
+          <span className="text-xs">CTRL</span> K
         </kbd>
       )}
       {!!id && (
@@ -187,20 +187,32 @@ export const Item = ({
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <div className="text-muted-foreground p-2 text-xs">
-                Last edited on{" "}
-                {document
-                  ? new Date(
-                      document.updatedAt ?? document._creationTime,
-                    ).toLocaleString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      hour12: true,
-                    })
-                  : "..."}
+              <div className="space-y-1 p-2 text-xs">
+                <p className="text-muted-foreground">
+                  Last edited on{" "}
+                  {document
+                    ? new Date(
+                        document.updatedAt ?? document._creationTime,
+                      ).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        hour12: true,
+                      })
+                    : "..."}
+                </p>
+                <p className="text-muted-foreground/70">
+                  Created on{" "}
+                  {document
+                    ? new Date(document._creationTime).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        year: "numeric",
+                      })
+                    : "..."}
+                </p>
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
