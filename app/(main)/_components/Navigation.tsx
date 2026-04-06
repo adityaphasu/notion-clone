@@ -32,6 +32,7 @@ import { useSettings } from "@/hooks/useSettings";
 import { Navbar } from "./Navbar";
 import { ScrollableList } from "@/components/scrollable-list";
 import { FavoritesList } from "./FavoritesList";
+import { ActionTooltip } from "@/components/action-tooltip";
 
 const Navigation = () => {
   const search = useSearch();
@@ -61,6 +62,18 @@ const Navigation = () => {
       collapse();
     }
   }, [pathname, isMobile]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.ctrlKey && e.key === "\\") {
+        e.preventDefault();
+        isCollapsed ? resetWidth() : collapse();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isCollapsed]);
 
   const handleMouseDown = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -146,19 +159,26 @@ const Navigation = () => {
           isMobile && "w-0",
         )}
       >
-        <div
-          onClick={collapse}
-          role="button"
-          className={cn(
-            "text-muted-foreground absolute top-3 right-2 h-6 w-6 rounded-sm opacity-0 transition group-hover/sidebar:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600",
-            isMobile && "opacity-100",
-          )}
-        >
-          <ChevronsLeft className="h-6 w-6" />
-        </div>
+        <ActionTooltip label="Close sidebar (Ctrl + \)">
+          <div
+            onClick={collapse}
+            role="button"
+            className={cn(
+              "text-muted-foreground absolute top-3 right-2 h-6 w-6 rounded-sm opacity-0 transition group-hover/sidebar:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600",
+              isMobile && "opacity-100",
+            )}
+          >
+            <ChevronsLeft className="h-6 w-6" />
+          </div>
+        </ActionTooltip>
         <div>
           <UserItem />
-          <Item label="Search" icon={Search} isSearch onClick={search.onOpen} />
+          <Item
+            label="Search"
+            icon={Search}
+            onClick={search.onOpen}
+            shortcut="Ctrl + K"
+          />
           <Item label="Settings" icon={Settings} onClick={settings.onOpen} />
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
         </div>
@@ -214,11 +234,11 @@ const Navigation = () => {
             )}
           >
             {isCollapsed && (
-              <MenuIcon
-                onClick={resetWidth}
-                role="button"
-                className="text-muted-foreground h-6 w-6"
-              />
+              <ActionTooltip label="Open sidebar (Ctrl + \)">
+                <button onClick={resetWidth}>
+                  <MenuIcon className="text-muted-foreground h-6 w-6" />
+                </button>
+              </ActionTooltip>
             )}
           </nav>
         )}

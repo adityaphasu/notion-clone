@@ -9,6 +9,7 @@ import { Title } from "./Title";
 import { Banner } from "./Banner";
 import { Menu } from "./Menu";
 import { Publish } from "./Publish";
+import { ActionTooltip } from "@/components/action-tooltip";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -40,12 +41,11 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
     <>
       <nav className="bg-background dark:bg-dark flex w-full items-center gap-x-2 px-3 py-2">
         {isCollapsed && (
-          <button aria-label="Menu">
-            <MenuIcon
-              onClick={onResetWidth}
-              className="text-muted-foreground h-6 w-6"
-            />
-          </button>
+          <ActionTooltip label="Open sidebar (Ctrl + \)">
+            <button aria-label="Menu" onClick={onResetWidth}>
+              <MenuIcon className="text-muted-foreground h-6 w-6" />
+            </button>
+          </ActionTooltip>
         )}
         <div className="flex w-full items-center justify-between">
           <Title initialData={document} />

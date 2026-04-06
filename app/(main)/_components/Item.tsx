@@ -31,7 +31,6 @@ interface ItemProps {
   documentIcon?: string;
   active?: boolean;
   expanded?: boolean;
-  isSearch?: boolean;
   level?: number;
   onExpand?: () => void;
   label: string;
@@ -39,6 +38,7 @@ interface ItemProps {
   icon: LucideIcon;
   isFavorite?: boolean;
   onFavorite?: () => void;
+  shortcut?: string;
 }
 
 export const Item = ({
@@ -48,12 +48,12 @@ export const Item = ({
   icon: Icon,
   active,
   documentIcon,
-  isSearch,
   level = 0,
   onExpand,
   expanded,
   isFavorite,
   onFavorite,
+  shortcut,
 }: ItemProps) => {
   const router = useRouter();
   const params = useParams();
@@ -137,9 +137,9 @@ export const Item = ({
       )}
 
       <span className="truncate">{label}</span>
-      {isSearch && (
+      {shortcut && (
         <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none dark:bg-neutral-700">
-          <span className="text-xs">CTRL</span> K
+          {shortcut}
         </kbd>
       )}
       {!!id && (
