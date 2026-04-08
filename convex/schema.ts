@@ -17,4 +17,9 @@ export default defineSchema({
   })
     .index("by_user", ["userId"])
     .index("by_user_parent", ["userId", "parentDocument"]),
+
+  userSettings: defineTable({
+    userId: v.string(),
+    editorFont: v.optional(v.string()),
+  }).index("by_user", ["userId"]),
 });
