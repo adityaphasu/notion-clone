@@ -1,5 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { EditorFont } from "@/hooks/useEditorFont";
+import { useCoverImage } from "@/hooks/useCoverImage";
+import { fontFamilies } from "@/lib/editorFont";
 import {
   BlockNoteEditor,
   PartialBlock,
@@ -7,19 +11,18 @@ import {
   BlockNoteSchema,
 } from "@blocknote/core";
 import { useCreateBlockNote } from "@blocknote/react";
-import { useCoverImage } from "@/hooks/useCoverImage";
 import { BlockNoteView } from "@blocknote/mantine";
 import { useTheme } from "next-themes";
 import { useEdgeStore } from "@/lib/edgestore";
 import { codeBlockOptions } from "@blocknote/code-block";
 import "@blocknote/core/style.css";
 import "@blocknote/mantine/style.css";
-import { useEffect, useRef } from "react";
 
 interface EditorProps {
   onChange: (value: string) => void;
   initialContent?: string;
   editable?: boolean;
+  editorFont?: string;
   onEditorReady?: (editor: BlockNoteEditor) => void;
 }
 
@@ -66,6 +69,7 @@ const Editor = ({
   onChange,
   initialContent,
   editable = true,
+  editorFont,
   onEditorReady,
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
@@ -162,6 +166,11 @@ const Editor = ({
     <div
       ref={wrapperRef}
       className="relative flex-1 shrink-0 pb-10"
+      style={
+        {
+          "--editor-font": fontFamilies[editorFont as EditorFont],
+        } as React.CSSProperties
+      }
       onDropCapture={handleCapture}
       onDragOverCapture={handleCapture}
       onMouseDown={handleMouseDown}

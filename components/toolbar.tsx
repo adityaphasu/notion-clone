@@ -13,13 +13,16 @@ import TextareaAutosize from "react-textarea-autosize";
 import { IconPicker } from "./icon-picker";
 import { ImageIcon, Smile, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { EditorFont, useEditorFont } from "@/hooks/useEditorFont";
+import { fontFamilies } from "@/lib/editorFont";
 
 interface ToolbarProps {
   initialData: Doc<"documents">;
+  editorFont?: string;
   preview?: boolean;
 }
 
-export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
+export const Toolbar = ({ initialData, preview, editorFont }: ToolbarProps) => {
   const inputRef = useRef<ComponentRef<"textarea">>(null);
 
   const [isEditing, setIsEditing] = useState(false);
@@ -27,6 +30,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
 
   const update = useMutation(api.documents.update);
   const removeIcon = useMutation(api.documents.removeIcon);
+
   const coverImage = useCoverImage();
 
   const enableInput = () => {
@@ -163,6 +167,7 @@ export const Toolbar = ({ initialData, preview }: ToolbarProps) => {
         value={value}
         disabled={preview}
         onChange={(e) => onInput(e.target.value)}
+        style={{ fontFamily: fontFamilies[editorFont as EditorFont] }}
         className={cn(
           "w-full resize-none bg-transparent text-5xl font-bold wrap-break-word outline-hidden",
           "text-[#3F3F3F] placeholder:text-gray-300 disabled:cursor-default dark:text-[#CFCFCF]",
