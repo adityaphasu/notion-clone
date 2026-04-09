@@ -62,6 +62,18 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     };
   }, [doc, resolvedTheme, documentId]);
 
+  useEffect(() => {
+    if (!doc) return;
+    if (doc.editorFont === editorFont) return;
+
+    update({
+      id: documentId,
+      editorFont,
+    });
+  }, [doc, editorFont, documentId, update]);
+
+  const activeFont = doc?.editorFont ?? editorFont;
+
   const onChange = (content: string) => {
     update({
       id: documentId,
@@ -93,12 +105,12 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     <div className="pb-35">
       <Cover url={doc.coverImage} />
       <div className="relative mx-auto md:w-[90%]">
-        <Toolbar initialData={doc} editorFont={editorFont} />
+        <Toolbar initialData={doc} editorFont={activeFont} />
         <Editor
           onChange={onChange}
           initialContent={doc.content}
           onEditorReady={setEditor}
-          editorFont={editorFont}
+          editorFont={activeFont}
         />
         <TableOfContents editor={editor} />
       </div>

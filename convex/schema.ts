@@ -14,6 +14,7 @@ export default defineSchema({
     order: v.optional(v.number()),
     updatedAt: v.optional(v.number()),
     isFavorite: v.optional(v.boolean()),
+    editorFont: v.optional(v.string()),
   })
     .index("by_user", ["userId"])
     .index("by_user_parent", ["userId", "parentDocument"]),
