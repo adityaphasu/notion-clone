@@ -21,7 +21,7 @@ const FONTS: { label: string; value: EditorFont }[] = [
 
 export const SettingsModal = () => {
   const settings = useSettings();
-  const [editorFont, setEditorFont] = useEditorFont({
+  const { editorFont, setEditorFont } = useEditorFont({
     enabled: settings.isOpen,
   });
 
@@ -29,48 +29,50 @@ export const SettingsModal = () => {
     <Dialog open={settings.isOpen} onOpenChange={settings.onClose}>
       <DialogTitle hidden>Settings</DialogTitle>
       <DialogContent className="dark:bg-dark">
-        <DialogHeader className="border-b pb-3">
+        <DialogHeader className="border-b pb-2">
           <h2 className="text-lg font-medium">My settings</h2>
         </DialogHeader>
-        <div className="flex items-center justify-between">
-          <div className="flex flex-col gap-y-1">
-            <Label>Appearance</Label>
-            <span className="text-muted-foreground text-[0.8rem]">
-              Customize how Zotion looks on your device!
-            </span>
+        <div className="divide-primary/10 divide-y">
+          <div className="flex items-center justify-between py-2">
+            <div className="flex flex-col gap-y-1">
+              <Label>Appearance</Label>
+              <span className="text-muted-foreground text-[0.8rem]">
+                Customize how Zotion looks on your device.
+              </span>
+            </div>
+            <ModeToggle />
           </div>
-          <ModeToggle />
-        </div>
-        <div className="flex flex-col gap-y-3 pt-1">
-          <div className="flex flex-col gap-y-1">
-            <Label>Editor font</Label>
-            <span className="text-muted-foreground text-[0.8rem]">
-              Choose the font used in the editor.
-            </span>
-          </div>
-          <div className="flex gap-2">
-            {FONTS.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => setEditorFont(option.value)}
-                className={cn(
-                  "hover:bg-primary/5 flex flex-1 flex-col items-center gap-1 rounded-md border px-3 py-2 text-sm transition",
-                  editorFont === option.value && "ring-primary ring",
-                )}
-              >
-                <span
-                  className="text-xl"
-                  style={{
-                    fontFamily: fontFamilies[option.value],
-                  }}
+          <div className="flex flex-col gap-y-3 py-2">
+            <div className="flex flex-col gap-y-1">
+              <Label>Editor font</Label>
+              <span className="text-muted-foreground text-[0.8rem]">
+                Choose the font used in the editor.
+              </span>
+            </div>
+            <div className="flex gap-2">
+              {FONTS.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => setEditorFont(option.value)}
+                  className={cn(
+                    "hover:bg-primary/5 flex flex-1 flex-col items-center gap-1 rounded-md border px-3 py-2 text-sm transition",
+                    editorFont === option.value && "ring-primary ring",
+                  )}
                 >
-                  Ag
-                </span>
-                <span className="text-muted-foreground text-xs">
-                  {option.label}
-                </span>
-              </button>
-            ))}
+                  <span
+                    className="text-xl"
+                    style={{
+                      fontFamily: fontFamilies[option.value],
+                    }}
+                  >
+                    Ag
+                  </span>
+                  <span className="text-muted-foreground text-xs">
+                    {option.label}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </DialogContent>

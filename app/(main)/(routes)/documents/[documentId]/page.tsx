@@ -35,7 +35,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     documentId: documentId,
   });
 
-  const [editorFont] = useEditorFont({ enabled: true });
+  const { editorFont, isFontLoading } = useEditorFont({ enabled: true });
 
   const update = useMutation(api.documents.update);
 
@@ -69,7 +69,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     });
   };
 
-  if (doc === undefined) {
+  if (doc === undefined || isFontLoading) {
     return (
       <div>
         <Cover.Skeleton />
