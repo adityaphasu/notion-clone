@@ -13,6 +13,7 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useMutation, useQuery } from "convex/react";
 import { BlockNoteEditor } from "@blocknote/core";
 import { TableOfContents } from "@/components/table-of-contents";
+import { useEditorFont } from "@/hooks/useEditorFont";
 
 interface DocumentIdPageProps {
   params: Promise<{
@@ -33,6 +34,8 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const doc = useQuery(api.documents.getById, {
     documentId: documentId,
   });
+
+  const [editorFont] = useEditorFont({ enabled: true });
 
   const update = useMutation(api.documents.update);
 
@@ -90,11 +93,12 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     <div className="pb-35">
       <Cover url={doc.coverImage} />
       <div className="relative mx-auto md:w-[90%]">
-        <Toolbar initialData={doc} />
+        <Toolbar initialData={doc} editorFont={editorFont} />
         <Editor
           onChange={onChange}
           initialContent={doc.content}
           onEditorReady={setEditor}
+          editorFont={editorFont}
         />
         <TableOfContents editor={editor} />
       </div>
