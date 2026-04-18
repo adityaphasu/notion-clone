@@ -28,19 +28,22 @@ import {
 } from "@/components/ui/popover";
 import { TrashBox } from "./TrashBox";
 import { useSearch } from "@/hooks/useSearch";
-import { useSettings } from "@/hooks/useSettings";
+import { useSettings } from "@/hooks/useSettingsModal";
 import { Navbar } from "./Navbar";
 import { ScrollableList } from "@/components/scrollable-list";
 import { FavoritesList } from "./FavoritesList";
 import { ActionTooltip } from "@/components/action-tooltip";
 
 const Navigation = () => {
-  const search = useSearch();
-  const settings = useSettings();
+  const params = useParams();
   const router = useRouter();
   const pathname = usePathname();
-  const params = useParams();
+
   const isMobile = useMediaQuery("(max-width: 768px)");
+
+  const search = useSearch();
+  const settings = useSettings();
+
   const create = useMutation(api.documents.create);
 
   const isResizingRef = useRef(false);

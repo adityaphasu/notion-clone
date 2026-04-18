@@ -7,7 +7,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { useSettings } from "@/hooks/useSettings";
+import { useSettings } from "@/hooks/useSettingsModal";
 import { ModeToggle } from "../mode-toggle";
 import { EditorFont, useEditorFont } from "@/hooks/useEditorFont";
 import { cn } from "@/lib/utils";
