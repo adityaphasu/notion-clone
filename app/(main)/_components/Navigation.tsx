@@ -33,6 +33,7 @@ import { Navbar } from "./Navbar";
 import { ScrollableList } from "@/components/scrollable-list";
 import { FavoritesList } from "./FavoritesList";
 import { ActionTooltip } from "@/components/action-tooltip";
+import { useFocusMode } from "@/hooks/useFocusMode";
 
 const Navigation = () => {
   const params = useParams();
@@ -43,6 +44,7 @@ const Navigation = () => {
 
   const search = useSearch();
   const settings = useSettings();
+  const { focusMode } = useFocusMode();
 
   const create = useMutation(api.documents.create);
 
@@ -51,6 +53,8 @@ const Navigation = () => {
   const navbarRef = useRef<ComponentRef<"div">>(null);
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
+
+  const [isNavbarHovered, setIsNavbarHovered] = useState(false);
 
   useEffect(() => {
     if (isMobile) {
@@ -65,6 +69,30 @@ const Navigation = () => {
       collapse();
     }
   }, [pathname, isMobile]);
+
+  useEffect(() => {
+    if (focusMode && params.documentId && !isMobile) {
+      collapse();
+    } else {
+      resetWidth();
+    }
+  }, [params.documentId, focusMode, isMobile]);
+
+  useEffect(() => {
+    if (!navbarRef.current) return;
+
+    if (
+      focusMode &&
+      params.documentId &&
+      !isNavbarHovered &&
+      isCollapsed &&
+      !isMobile
+    ) {
+      navbarRef.current.style.setProperty("opacity", "0");
+    } else {
+      navbarRef.current.style.removeProperty("opacity");
+    }
+  }, [focusMode, params.documentId, isMobile, isNavbarHovered, isCollapsed]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -219,8 +247,10 @@ const Navigation = () => {
       </aside>
       <div
         ref={navbarRef}
+        onMouseEnter={() => setIsNavbarHovered(true)}
+        onMouseLeave={() => setIsNavbarHovered(false)}
         className={cn(
-          "absolute top-0 left-60 z-40 w-[calc(100%-240px)]",
+          "absolute top-0 left-60 z-40 w-[calc(100%-240px)] transition-all duration-300",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "left-0 w-full",
         )}

@@ -6,6 +6,7 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { ImageIcon, X } from "lucide-react";
 import { useCoverImage } from "@/hooks/useCoverImage";
+import { useFocusMode } from "@/hooks/useFocusMode";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useParams } from "next/navigation";
@@ -25,6 +26,8 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
 
   const params = useParams();
   const coverImage = useCoverImage();
+  const { focusMode } = useFocusMode();
+
   const removeCoverImage = useMutation(api.documents.removeCoverImage);
 
   const onRemove = async () => {
@@ -48,9 +51,10 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
   return (
     <div
       className={cn(
-        "group relative z-10 h-[35vh] w-full",
-        !url && "h-[12vh]",
-        url && "bg-muted",
+        "group relative z-10 w-full",
+        url && "bg-muted h-[35vh] md:h-48.5",
+        !url && !focusMode && "h-[12vh] md:h-25",
+        !url && focusMode && "h-20 md:h-20",
       )}
     >
       {!!url &&
