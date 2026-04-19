@@ -7,10 +7,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 import { useSettings } from "@/hooks/useSettingsModal";
 import { ModeToggle } from "../mode-toggle";
 import { EditorFont, useEditorFont } from "@/hooks/useEditorFont";
-import { cn } from "@/lib/utils";
+import { useFocusMode } from "@/hooks/useFocusMode";
 import { fontFamilies } from "@/lib/editorFont";
 
 const FONTS: { label: string; value: EditorFont }[] = [
@@ -24,6 +26,7 @@ export const SettingsModal = () => {
   const { editorFont, setEditorFont } = useEditorFont({
     enabled: settings.isOpen,
   });
+  const { focusMode, setFocusMode } = useFocusMode();
 
   return (
     <Dialog open={settings.isOpen} onOpenChange={settings.onClose}>
@@ -73,6 +76,16 @@ export const SettingsModal = () => {
                 </button>
               ))}
             </div>
+          </div>
+          <div className="flex items-center justify-between gap-4 py-2">
+            <div className="flex flex-col gap-y-1">
+              <Label>Focus mode</Label>
+              <span className="text-muted-foreground text-[0.8rem]">
+                Collapse the sidebar and topbar to minimize distractions and
+                focus on your content.
+              </span>
+            </div>
+            <Switch checked={focusMode} onCheckedChange={setFocusMode} />
           </div>
         </div>
       </DialogContent>
