@@ -23,6 +23,7 @@ export const getUserSettings = query({
 export const updateUserSettings = mutation({
   args: {
     editorFont: v.optional(v.string()),
+    focusMode: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();

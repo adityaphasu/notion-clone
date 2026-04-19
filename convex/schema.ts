@@ -22,5 +22,6 @@ export default defineSchema({
   userSettings: defineTable({
     userId: v.string(),
     editorFont: v.optional(v.string()),
+    focusMode: v.optional(v.boolean()),
   }).index("by_user", ["userId"]),
 });
