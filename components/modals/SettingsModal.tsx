@@ -26,7 +26,9 @@ export const SettingsModal = () => {
   const { editorFont, setEditorFont } = useEditorFont({
     enabled: settings.isOpen,
   });
-  const { focusMode, setFocusMode } = useFocusMode();
+  const { focusMode, setFocusMode } = useFocusMode({
+    enabled: settings.isOpen,
+  });
 
   return (
     <Dialog open={settings.isOpen} onOpenChange={settings.onClose}>

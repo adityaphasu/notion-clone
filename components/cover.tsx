@@ -26,7 +26,7 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
 
   const params = useParams();
   const coverImage = useCoverImage();
-  const { focusMode } = useFocusMode();
+  const { focusMode } = useFocusMode({ enabled: !preview });
 
   const removeCoverImage = useMutation(api.documents.removeCoverImage);
 
