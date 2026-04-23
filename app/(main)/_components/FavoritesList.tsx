@@ -7,7 +7,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Item } from "./Item";
 import { DocumentList } from "./DocumentList";
-import { FileIcon } from "lucide-react";
+import { FileIcon, Star } from "lucide-react";
 import { toast } from "sonner";
 
 export const FavoritesList = () => {
@@ -43,7 +43,8 @@ export const FavoritesList = () => {
 
   return (
     <div className="w-full">
-      <p className="text-muted-foreground/60 px-3 py-1 text-xs font-medium">
+      <p className="text-muted-foreground/60 flex items-center px-3 py-1 text-xs font-medium">
+        <Star className="mr-1 size-3 shrink-0 fill-yellow-400 text-yellow-400" />
         Favorites
       </p>
       {documents.map((document) => (

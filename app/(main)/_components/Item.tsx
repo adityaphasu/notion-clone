@@ -138,7 +138,7 @@ export const Item = ({
 
       <span className="truncate">{label}</span>
       {shortcut && (
-        <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto inline-flex h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none dark:bg-neutral-700">
+        <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none md:inline-flex dark:bg-neutral-700">
           {shortcut}
         </kbd>
       )}
@@ -148,7 +148,7 @@ export const Item = ({
             <div
               role="button"
               onClick={onCreate}
-              className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
+              className="ml-auto h-full rounded-sm opacity-100 transition hover:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-neutral-600"
             >
               <Plus className="text-muted-foreground h-4 w-4" />
             </div>
@@ -157,7 +157,7 @@ export const Item = ({
             <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
               <div
                 role="button"
-                className="ml-auto h-full rounded-sm opacity-0 group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600"
+                className="ml-auto h-full rounded-sm opacity-100 transition hover:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-neutral-600"
               >
                 <MoreHorizontal className="text-muted-foreground h-4 w-4" />
               </div>
