@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { useMediaQuery } from "usehooks-ts";
 import { Button } from "./ui/button";
-import { ImageIcon, X } from "lucide-react";
+import { EllipsisVertical, ImageIcon, X } from "lucide-react";
 import { useCoverImage } from "@/hooks/useCoverImage";
 import { useFocusMode } from "@/hooks/useFocusMode";
 import { useMutation } from "convex/react";
@@ -14,6 +15,12 @@ import { Id } from "@/convex/_generated/dataModel";
 import { useEdgeStore } from "@/lib/edgestore";
 import { Skeleton } from "./ui/skeleton";
 import { Spinner } from "./spinner";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
 
 interface CoverImageProps {
   url?: string;
@@ -29,6 +36,8 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
   const { focusMode } = useFocusMode({ enabled: !preview });
 
   const removeCoverImage = useMutation(api.documents.removeCoverImage);
+
+  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
 
   const onRemove = async () => {
     setIsRemoving(true);
@@ -63,7 +72,7 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
         ) : (
           <div className="h-full w-full" style={{ background: url }} />
         ))}
-      {url && !preview && (
+      {url && !preview && canHover && (
         <div className="absolute right-5 bottom-5 flex items-center gap-x-2 opacity-0 group-hover:opacity-100">
           <Button
             onClick={() => coverImage.onReplace(url)}
@@ -90,6 +99,27 @@ export const Cover = ({ url, preview }: CoverImageProps) => {
               </>
             )}
           </Button>
+        </div>
+      )}
+      {url && !preview && !canHover && (
+        <div className="absolute right-2 bottom-2 flex items-center">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="text-muted-foreground dark:bg-dark flex size-8 items-center justify-center rounded-full bg-white p-1 text-xs">
+                <EllipsisVertical className="size-5" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" alignOffset={7} sideOffset={5}>
+              <DropdownMenuItem onClick={() => coverImage.onReplace(url)}>
+                <ImageIcon className="mr-2 h-4 w-4" />
+                Change cover
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={onRemove} disabled={isRemoving}>
+                <X className="mr-2 h-4 w-4" />
+                Remove
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       )}
     </div>

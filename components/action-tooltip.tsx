@@ -6,6 +6,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useMediaQuery } from "usehooks-ts";
 
 interface ActionTooltipProps {
   label: string;
@@ -20,6 +21,12 @@ export const ActionTooltip = ({
   side,
   align,
 }: ActionTooltipProps) => {
+  const canHover = useMediaQuery("(hover: hover) and (pointer: fine)");
+
+  if (!canHover) {
+    return <>{children}</>;
+  }
+
   return (
     <TooltipProvider>
       <Tooltip>
