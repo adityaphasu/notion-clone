@@ -194,6 +194,7 @@ const Navigation = () => {
           <div
             onClick={collapse}
             role="button"
+            aria-label="Close sidebar"
             className={cn(
               "text-muted-foreground absolute top-3 right-2 h-6 w-6 rounded-sm opacity-0 transition group-hover/sidebar:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600",
               isMobile && "opacity-100",

@@ -70,7 +70,12 @@ export const Publish = ({ initialData }: PublishProps) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button size="sm" variant="ghost">
+        <Button
+          size="sm"
+          variant="ghost"
+          aria-label={initialData.isPublished ? "Published" : "Publish"}
+          title={initialData.isPublished ? "Published" : ""}
+        >
           {initialData.isPublished ? (
             <Globe className="h-4 w-4 text-sky-500" />
           ) : (

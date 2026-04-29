@@ -123,6 +123,8 @@ export const Item = ({
       {!!id && (
         <div
           role="button"
+          aria-label={expanded ? "Collapse page" : "Expand page"}
+          aria-expanded={!!expanded}
           className="mr-1 h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
           onClick={handleExpand}
         >
@@ -137,7 +139,9 @@ export const Item = ({
         <Icon className="text-muted-foreground mr-2 h-4.5 w-4.5 shrink-0" />
       )}
 
-      <span className="truncate">{label}</span>
+      <span className="truncate" title={label}>
+        {label}
+      </span>
       {shortcut && (
         <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none md:inline-flex dark:bg-neutral-700">
           {shortcut}
@@ -148,6 +152,7 @@ export const Item = ({
           <ActionTooltip label="Add sub-page">
             <div
               role="button"
+              aria-label="Add sub-page"
               onClick={onCreate}
               className="ml-auto h-full rounded-sm opacity-100 transition hover:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-neutral-600"
             >
@@ -155,14 +160,17 @@ export const Item = ({
             </div>
           </ActionTooltip>
           <DropdownMenu>
-            <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
-              <div
-                role="button"
-                className="ml-auto h-full rounded-sm opacity-100 transition hover:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-neutral-600"
-              >
-                <MoreHorizontal className="text-muted-foreground h-4 w-4" />
-              </div>
-            </DropdownMenuTrigger>
+            <ActionTooltip label="More actions">
+              <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
+                <div
+                  role="button"
+                  aria-label="More actions"
+                  className="ml-auto h-full rounded-sm opacity-100 transition hover:bg-neutral-300 md:opacity-0 md:group-hover:opacity-100 dark:hover:bg-neutral-600"
+                >
+                  <MoreHorizontal className="text-muted-foreground h-4 w-4" />
+                </div>
+              </DropdownMenuTrigger>
+            </ActionTooltip>
             <DropdownMenuContent
               className="w-65"
               align="start"
