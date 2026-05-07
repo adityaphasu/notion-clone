@@ -17,6 +17,7 @@ import {
 import {
   ChevronDown,
   ChevronRight,
+  GripVertical,
   LucideIcon,
   MoreHorizontal,
   Plus,
@@ -39,6 +40,7 @@ interface ItemProps {
   isFavorite?: boolean;
   onFavorite?: () => void;
   shortcut?: string;
+  showDragHandle?: boolean;
 }
 
 export const Item = ({
@@ -54,6 +56,7 @@ export const Item = ({
   isFavorite,
   onFavorite,
   shortcut,
+  showDragHandle = true,
 }: ItemProps) => {
   const router = useRouter();
   const params = useParams();
@@ -126,32 +129,37 @@ export const Item = ({
       role="button"
       style={{ paddingLeft: level ? `${level * 12 + 12}px` : "12px" }}
       className={cn(
-        "group text-muted-foreground hover:bg-primary/5 flex min-h-6.75 w-full items-center py-1 pr-3 text-sm font-medium",
+        "group text-muted-foreground hover:bg-primary/5 relative flex min-h-6.75 w-full items-center py-1 pr-3 text-sm font-medium",
         active && "bg-primary/5 text-primary",
       )}
     >
-      {!!id && (
-        <div
-          role="button"
-          aria-label={expanded ? "Collapse page" : "Expand page"}
-          aria-expanded={!!expanded}
-          className="mr-1 h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
-          onClick={handleExpand}
-        >
-          <ChevronIcon className="text-muted-foreground/50 h-4 w-4 shrink-0" />
-        </div>
-      )}
-      {documentIcon ? (
-        <div className="mr-1 shrink-0 text-[1.125rem] leading-none">
-          {documentIcon}
-        </div>
-      ) : (
-        <Icon className="text-muted-foreground mr-2 h-4.5 w-4.5 shrink-0" />
-      )}
+      <div className="group flex items-center truncate">
+        {!!id && showDragHandle && (
+          <GripVertical className="text-muted-foreground/50 absolute left-0.5 size-3 opacity-0 group-hover:opacity-100" />
+        )}
+        {!!id && (
+          <div
+            role="button"
+            aria-label={expanded ? "Collapse page" : "Expand page"}
+            aria-expanded={!!expanded}
+            className="mr-1 h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+            onClick={handleExpand}
+          >
+            <ChevronIcon className="text-muted-foreground/50 h-4 w-4 shrink-0" />
+          </div>
+        )}
+        {documentIcon ? (
+          <div className="mr-1 shrink-0 text-[1.125rem] leading-none">
+            {documentIcon}
+          </div>
+        ) : (
+          <Icon className="text-muted-foreground mr-2 h-4.5 w-4.5 shrink-0" />
+        )}
 
-      <span className="truncate" title={label}>
-        {label}
-      </span>
+        <span className="truncate" title={label}>
+          {label}
+        </span>
+      </div>
       {shortcut && (
         <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none md:inline-flex dark:bg-neutral-700">
           {shortcut}

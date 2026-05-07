@@ -61,6 +61,7 @@ export const FavoritesList = () => {
             onExpand={() => onExpand(document._id)}
             isFavorite={document.isFavorite}
             onFavorite={() => onToggleFavorite(document._id)}
+            showDragHandle={false}
           />
           {expanded[document._id] && (
             <DocumentList parentDocumentId={document._id} level={1} />
