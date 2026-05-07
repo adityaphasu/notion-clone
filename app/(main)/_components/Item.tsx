@@ -59,6 +59,8 @@ export const Item = ({
   const params = useParams();
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.documents.archive);
+  const restore = useMutation(api.documents.restore);
+
   const document = useQuery(
     api.documents.getById,
     id ? { documentId: id } : "skip",
@@ -76,8 +78,16 @@ export const Item = ({
 
     toast.promise(promise, {
       loading: "Moving to trash...",
-      success: "Note moved to trash!",
       error: "Failed to archive note.",
+    });
+
+    promise.then(() => {
+      toast("Note moved to trash", {
+        action: {
+          label: "Undo",
+          onClick: () => restore({ id }),
+        },
+      });
     });
   };
 
