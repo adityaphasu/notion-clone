@@ -75,6 +75,7 @@ const SortableItem = ({
     transition,
     opacity: isDragging ? 0.5 : 1,
     zIndex: isDragging ? 100 : undefined,
+    cursor: isDragging ? "grabbing" : "pointer",
   };
 
   return (
@@ -210,8 +211,14 @@ export const DocumentList = ({
 
       <DndContext
         sensors={sensors}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={handleDragEnd}
+        onDragStart={() => {
+          setIsDragging(true);
+          document.body.classList.add("cursor-grabbing");
+        }}
+        onDragEnd={(event) => {
+          document.body.classList.remove("cursor-grabbing");
+          handleDragEnd(event);
+        }}
         modifiers={[restrictToVerticalAxis, restrictToParentElement]}
         collisionDetection={closestCorners}
       >
