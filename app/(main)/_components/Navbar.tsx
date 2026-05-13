@@ -2,14 +2,16 @@
 
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
-import { MenuIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useMutation, useQuery } from "convex/react";
+import { MenuIcon, Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import { Title } from "./Title";
 import { Banner } from "./Banner";
 import { Menu } from "./Menu";
 import { Publish } from "./Publish";
 import { ActionTooltip } from "@/components/action-tooltip";
+import { Button } from "@/components/ui/button";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -18,9 +20,16 @@ interface NavbarProps {
 
 export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
   const params = useParams();
+
+  const toggleFavorite = useMutation(api.documents.toggleFavorite);
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId as Id<"documents">,
   });
+
+  const onToggleFavorite = () => {
+    if (!document) return;
+    toggleFavorite({ id: document._id });
+  };
 
   if (document === undefined) {
     return (
@@ -49,8 +58,24 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
         )}
         <div className="flex w-full items-center justify-between">
           <Title initialData={document} />
-          <div className="flex shrink-0 items-center gap-x-2">
+          <div className="flex shrink-0 items-center">
             <Publish initialData={document} />
+            <ActionTooltip
+              label={document.isFavorite ? "Unfavorite" : "Favorite"}
+            >
+              <Button
+                variant="ghost"
+                onClick={onToggleFavorite}
+                aria-label={document.isFavorite ? "Unfavorite" : "Favorite"}
+              >
+                <Star
+                  className={cn(
+                    "text-muted-foreground size-4.5",
+                    document.isFavorite && "fill-yellow-400 text-yellow-400",
+                  )}
+                />
+              </Button>
+            </ActionTooltip>
             <Menu documentId={document._id} />
           </div>
         </div>

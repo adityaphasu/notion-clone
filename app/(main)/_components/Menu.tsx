@@ -16,6 +16,7 @@ import { MoreHorizontal, Settings, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSettings } from "@/hooks/useSettingsModal";
+import { ActionTooltip } from "@/components/action-tooltip";
 
 interface MenuProps {
   documentId: Id<"documents">;
@@ -44,16 +45,13 @@ export const Menu = ({ documentId }: MenuProps) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          size="sm"
-          variant="ghost"
-          aria-label="Page menu"
-          title="Page menu"
-        >
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
+      <ActionTooltip label="Page actions">
+        <DropdownMenuTrigger asChild>
+          <Button size="sm" variant="ghost" aria-label="Page actions">
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+      </ActionTooltip>
       <DropdownMenuContent
         className="w-65"
         align="end"
