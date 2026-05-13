@@ -12,9 +12,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Trash } from "lucide-react";
+import { MoreHorizontal, Settings, Trash } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useSettings } from "@/hooks/useSettingsModal";
 
 interface MenuProps {
   documentId: Id<"documents">;
@@ -22,6 +23,8 @@ interface MenuProps {
 
 export const Menu = ({ documentId }: MenuProps) => {
   const router = useRouter();
+
+  const settings = useSettings();
 
   const archive = useMutation(api.documents.archive);
   const document = useQuery(api.documents.getById, {
@@ -57,9 +60,13 @@ export const Menu = ({ documentId }: MenuProps) => {
         alignOffset={8}
         forceMount
       >
+        <DropdownMenuItem onClick={settings.onOpen}>
+          <Settings className="mr-2 h-4 w-4" />
+          Settings
+        </DropdownMenuItem>
         <DropdownMenuItem onClick={onArchive}>
           <Trash className="mr-2 h-4 w-4" />
-          Delete
+          Move to Trash
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <div className="space-y-1 p-2 text-xs">
