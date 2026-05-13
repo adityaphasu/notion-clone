@@ -214,8 +214,8 @@ export const Item = ({
                 Delete
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <div className="space-y-1 p-2 text-xs">
-                <p className="text-muted-foreground">
+              <div className="space-y-0.5 p-2 text-[.6875rem]">
+                <p className="text-muted-foreground/70">
                   Last edited on{" "}
                   {document
                     ? new Date(

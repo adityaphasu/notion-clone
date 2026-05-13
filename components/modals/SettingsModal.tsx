@@ -17,8 +17,8 @@ import { fontFamilies } from "@/lib/editorFont";
 
 const FONTS: { label: string; value: EditorFont }[] = [
   { label: "Default", value: "default" },
-  { label: "Lora", value: "Lora" },
-  { label: "JetBrains Mono", value: "JetBrains Mono" },
+  { label: "Sans", value: "Lora" },
+  { label: "Mono", value: "JetBrains Mono" },
 ];
 
 export const SettingsModal = () => {
@@ -65,7 +65,7 @@ export const SettingsModal = () => {
                   )}
                 >
                   <span
-                    className="text-xl"
+                    className="text-xl font-medium"
                     style={{
                       fontFamily: fontFamilies[option.value],
                     }}
