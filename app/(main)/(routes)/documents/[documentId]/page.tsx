@@ -60,7 +60,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
       window.document.title = "Zotion";
       if (link) link.href = defaultFavicon;
     };
-  }, [doc, resolvedTheme, documentId]);
+  }, [doc?.title, doc?.icon, resolvedTheme, documentId]);
 
   useEffect(() => {
     if (!doc) return;
