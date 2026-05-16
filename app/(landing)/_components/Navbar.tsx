@@ -28,7 +28,7 @@ export const Navbar = () => {
           {!isLoading && !isAuthenticated && (
             <>
               <SignInButton mode="modal">
-                <Button variant="ghost" size="sm">
+                <Button className="hidden md:block" variant="ghost" size="sm">
                   Log In
                 </Button>
               </SignInButton>
