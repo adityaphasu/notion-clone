@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useSettings } from "@/hooks/useSettingsModal";
 import { ActionTooltip } from "@/components/action-tooltip";
+import { useWordCount } from "@/hooks/useWordCount";
 
 interface MenuProps {
   documentId: Id<"documents">;
@@ -26,6 +27,7 @@ export const Menu = ({ documentId }: MenuProps) => {
   const router = useRouter();
 
   const settings = useSettings();
+  const words = useWordCount();
 
   const archive = useMutation(api.documents.archive);
   const document = useQuery(api.documents.getById, {
@@ -67,8 +69,12 @@ export const Menu = ({ documentId }: MenuProps) => {
           Move to Trash
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <div className="space-y-0.5 p-2 text-[.6875rem]">
-          <p className="text-muted-foreground/70">
+        <div className="text-muted-foreground/70 space-y-0.5 p-2 text-[.6875rem]">
+          <p>
+            Word count: {words.wordCount}{" "}
+            {words.wordCount === 1 ? "word" : "words"}
+          </p>
+          <p>
             Last edited on{" "}
             {document
               ? new Date(
@@ -83,7 +89,7 @@ export const Menu = ({ documentId }: MenuProps) => {
                 })
               : "..."}
           </p>
-          <p className="text-muted-foreground/70">
+          <p>
             Created on{" "}
             {document
               ? new Date(document._creationTime).toLocaleString("en-US", {

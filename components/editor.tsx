@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { EditorFont } from "@/hooks/useEditorFont";
 import { useCoverImage } from "@/hooks/useCoverImage";
+import { useWordCount } from "@/hooks/useWordCount";
 import { fontFamilies } from "@/lib/editorFont";
 import {
   BlockNoteEditor,
@@ -76,6 +77,7 @@ const Editor = ({
   const { edgestore } = useEdgeStore();
 
   const coverImage = useCoverImage();
+  const wordCount = useWordCount();
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const trackedUrlsRef = useRef<Set<string>>(new Set());
@@ -85,17 +87,68 @@ const Editor = ({
     return res.url;
   };
 
+  const getWords = () => {
+    let count: number = 0;
+    editor.forEachBlock((block) => {
+      if (
+        block.type === "paragraph" ||
+        block.type === "heading" ||
+        block.type === "quote" ||
+        block.type === "bulletListItem" ||
+        block.type === "checkListItem" ||
+        block.type === "numberedListItem" ||
+        block.type === "toggleListItem"
+      ) {
+        const words = block.content
+          .filter((c) => c.type === "text")
+          .map((c) => c.text)
+          .join(" ")
+          .trim()
+          .split(/\s+/)
+          .filter((word) => /[a-zA-Z0-9]/.test(word));
+
+        count += words.length;
+      }
+
+      if (block.type === "table") {
+        block.content.rows.forEach((row) => {
+          row.cells.forEach((cell: any) => {
+            const words = cell.content
+              .filter((c: any) => c.type === "text")
+              .map((c: any) => c.text)
+              .join(" ")
+              .trim()
+              .split(/\s+/)
+              .filter((word: string) => /[a-zA-Z0-9]/.test(word));
+
+            count += words.length;
+          });
+        });
+      }
+
+      return true;
+    });
+    wordCount.setWordCount(count);
+  };
+
   const editor: BlockNoteEditor = useCreateBlockNote({
     initialContent: initialContent
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
     uploadFile: handleUpload,
     schema,
+    tables: {
+      splitCells: true,
+      cellBackgroundColor: true,
+      cellTextColor: true,
+      headers: true,
+    },
   });
 
   useEffect(() => {
     if (editor) {
       trackedUrlsRef.current = getMediaUrls(editor);
+      getWords();
     }
     if (editor && onEditorReady) {
       onEditorReady(editor);
@@ -116,6 +169,8 @@ const Editor = ({
       });
     });
     trackedUrlsRef.current = currentUrls;
+
+    getWords();
 
     onChange(JSON.stringify(editor.document, null, 2));
   };
