@@ -169,9 +169,10 @@ export const Toolbar = ({ initialData, preview, editorFont }: ToolbarProps) => {
         onChange={(e) => onInput(e.target.value)}
         style={{ fontFamily: fontFamilies[editorFont as EditorFont] }}
         className={cn(
-          "w-full resize-none bg-transparent text-5xl font-bold wrap-break-word outline-hidden",
+          "w-full resize-none bg-transparent font-bold wrap-break-word outline-hidden",
           "text-[#3F3F3F] placeholder:text-gray-300 disabled:cursor-default dark:text-[#CFCFCF]",
           !isEditing && "cursor-pointer",
+          initialData.smallText ? "text-4xl" : "text-5xl",
         )}
       />
     </div>

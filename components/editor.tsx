@@ -18,12 +18,14 @@ import { useEdgeStore } from "@/lib/edgestore";
 import { codeBlockOptions } from "@blocknote/code-block";
 import "@blocknote/core/style.css";
 import "@blocknote/mantine/style.css";
+import { Doc } from "@/convex/_generated/dataModel";
 
 interface EditorProps {
   onChange: (value: string) => void;
   initialContent?: string;
   editable?: boolean;
   editorFont?: string;
+  smallText?: boolean;
   onEditorReady?: (editor: BlockNoteEditor) => void;
 }
 
@@ -71,6 +73,7 @@ const Editor = ({
   initialContent,
   editable = true,
   editorFont,
+  smallText = false,
   onEditorReady,
 }: EditorProps) => {
   const { resolvedTheme } = useTheme();
@@ -220,10 +223,11 @@ const Editor = ({
   return (
     <div
       ref={wrapperRef}
-      className="relative flex-1 shrink-0 pb-10"
+      className="relative flex-1 shrink-0 px-0 pb-10"
       style={
         {
           "--editor-font": fontFamilies[editorFont as EditorFont],
+          "--editor-font-size": smallText ? "15px" : "16px",
         } as React.CSSProperties
       }
       onDropCapture={handleCapture}

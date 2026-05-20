@@ -158,6 +158,7 @@
 
   .bn-editor * {
     font-family: var(--editor-font);
+    font-size: var(--editor-font-size);
   }
 
   .bn-color-picker-dropdown {

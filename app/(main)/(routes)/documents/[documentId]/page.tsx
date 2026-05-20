@@ -73,6 +73,8 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   }, [doc, editorFont, documentId, update]);
 
   const activeFont = doc?.editorFont ?? editorFont;
+  const isFullWidth = doc?.fullWidth ?? true;
+  const isSmallText = doc?.smallText ?? false;
 
   const onChange = (content: string) => {
     update({
@@ -104,11 +106,16 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   return (
     <div className="pb-35">
       <Cover url={doc.coverImage} />
-      <div className="relative mx-auto md:w-[90%]">
+      <div
+        className={`relative mx-auto md:w-[90%] ${
+          !isFullWidth ? "max-w-200" : ""
+        }`}
+      >
         <Toolbar initialData={doc} editorFont={activeFont} />
         <Editor
           onChange={onChange}
           initialContent={doc.content}
+          smallText={isSmallText}
           onEditorReady={setEditor}
           editorFont={activeFont}
         />
