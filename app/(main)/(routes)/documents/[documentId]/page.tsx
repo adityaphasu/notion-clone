@@ -75,6 +75,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
   const activeFont = doc?.editorFont ?? editorFont;
   const isFullWidth = doc?.fullWidth ?? true;
   const isSmallText = doc?.smallText ?? false;
+  const showToc = doc?.showToc ?? true;
 
   const onChange = (content: string) => {
     update({
@@ -119,7 +120,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
           onEditorReady={setEditor}
           editorFont={activeFont}
         />
-        <TableOfContents editor={editor} />
+        {showToc && <TableOfContents editor={editor} />}
       </div>
     </div>
   );

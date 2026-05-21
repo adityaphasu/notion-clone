@@ -17,6 +17,7 @@ import {
   Maximize2,
   MoreHorizontal,
   Settings,
+  TableOfContents,
   Trash,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -43,8 +44,8 @@ export const Menu = ({ documentId }: MenuProps) => {
   const update = useMutation(api.documents.update);
 
   const isFullWidth = document?.fullWidth ?? true;
+  const toggleToc = document?.showToc ?? true;
   const isSmallText = !!document?.smallText;
-  console.log(document?.fullWidth);
 
   const onArchive = () => {
     router.push("/documents");
@@ -71,6 +72,13 @@ export const Menu = ({ documentId }: MenuProps) => {
     });
   };
 
+  const onTocChange = (checked: boolean) => {
+    update({
+      id: documentId,
+      showToc: checked,
+    });
+  };
+
   return (
     <DropdownMenu>
       <ActionTooltip label="Page actions">
@@ -86,41 +94,25 @@ export const Menu = ({ documentId }: MenuProps) => {
         alignOffset={8}
         forceMount
       >
-        <DropdownMenuItem
-          className="flex items-center justify-between"
-          onSelect={(e) => e.preventDefault()}
-          onClick={() => {
-            onSmallTextChange(!isSmallText);
-          }}
-        >
-          <div className="flex items-center justify-between gap-1">
-            <AArrowDown className="mr-2 h-4 w-4" />
-            Small text
-          </div>
-          <Switch
-            size="sm"
-            checked={isSmallText}
-            onCheckedChange={onSmallTextChange}
-          />
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onSelect={(e) => e.preventDefault()}
-          onClick={() => {
-            onFullWidthChange(!isFullWidth);
-          }}
-          className="flex items-center justify-between"
-        >
-          <div className="flex items-center justify-between gap-1">
-            <Maximize2 className="mr-2 h-4 w-4 rotate-45" />
-            Full width
-          </div>
-          <Switch
-            size="sm"
-            checked={isFullWidth}
-            onCheckedChange={onFullWidthChange}
-          />
-        </DropdownMenuItem>
-        <DropdownMenuSeparator className="h-px" />
+        <MenuToggleItem
+          label="Small text"
+          icon={AArrowDown}
+          checked={isSmallText}
+          onChange={onSmallTextChange}
+        />
+        <MenuToggleItem
+          label="Full width"
+          icon={Maximize2}
+          checked={isFullWidth}
+          onChange={onFullWidthChange}
+        />
+        <MenuToggleItem
+          label="Show table of contents"
+          icon={TableOfContents}
+          checked={toggleToc}
+          onChange={onTocChange}
+        />
+        <DropdownMenuSeparator className="mx-1.5" />
         <DropdownMenuItem onClick={settings.onOpen}>
           <Settings className="mr-2 h-4 w-4" />
           Settings
@@ -129,7 +121,7 @@ export const Menu = ({ documentId }: MenuProps) => {
           <Trash className="mr-2 h-4 w-4" />
           Move to Trash
         </DropdownMenuItem>
-        <DropdownMenuSeparator className="text-gray-500" />
+        <DropdownMenuSeparator className="mx-1.5" />
         <div className="text-muted-foreground/70 space-y-0.5 p-2 text-[.6875rem]">
           <p>
             Word count: {words.wordCount}{" "}
@@ -169,3 +161,31 @@ export const Menu = ({ documentId }: MenuProps) => {
 Menu.Skeleton = function MenuSkeleton() {
   return <Skeleton className="h-8 w-8" />;
 };
+
+const MenuToggleItem = ({
+  label,
+  icon: Icon,
+  checked,
+  onChange,
+}: {
+  label: string;
+  icon: React.FC<{ className?: string }>;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+}) => (
+  <DropdownMenuItem
+    onSelect={(e) => e.preventDefault()}
+    onClick={() => {
+      onChange(!checked);
+    }}
+    className="flex items-center justify-between"
+  >
+    <div className="flex items-center justify-between gap-1">
+      <Icon
+        className={`mr-2 h-4 w-4 ${label === "Full width" ? "rotate-45" : " "}`}
+      />
+      {label}
+    </div>
+    <Switch size="sm" checked={checked} onCheckedChange={onChange} />
+  </DropdownMenuItem>
+);

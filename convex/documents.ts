@@ -105,6 +105,7 @@ export const create = mutation({
       parentDocument: args.parentDocument,
       userId,
       fullWidth: true,
+      showToc: true,
       isArchived: false,
       isPublished: false,
     });
@@ -280,6 +281,7 @@ export const update = mutation({
     editorFont: v.optional(v.string()),
     fullWidth: v.optional(v.boolean()),
     smallText: v.optional(v.boolean()),
+    showToc: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
