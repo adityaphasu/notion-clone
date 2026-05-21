@@ -25,6 +25,7 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
   const [open, setOpen] = useState(false);
   const [canScroll, setCanScroll] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [tocTop, setTocTop] = useState(65);
 
   const SEGMENTS = 10;
   const filledSegments = Math.round(scrollProgress * SEGMENTS);
@@ -39,6 +40,9 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
       setCanScroll(docHeight > 0);
       const progress = docHeight > 0 ? scrollTop / docHeight : 0;
       setScrollProgress(progress);
+
+      const top = Math.max(50, 65 - progress * 50);
+      setTocTop(top);
     };
 
     container.addEventListener("scroll", handleScroll, { passive: true });
@@ -107,7 +111,10 @@ export const TableOfContents = ({ editor }: TableOfContentsProps) => {
   if (!headings.length || !canScroll) return null;
 
   return (
-    <div className="fixed top-1/2 right-5 z-50 -translate-y-1/2">
+    <div
+      className="fixed right-5 z-50 -translate-y-1/2"
+      style={{ top: `${tocTop}%` }}
+    >
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <div
