@@ -51,6 +51,7 @@ const Navigation = () => {
   const isResizingRef = useRef(false);
   const sidebarRef = useRef<ComponentRef<"aside">>(null);
   const navbarRef = useRef<ComponentRef<"div">>(null);
+
   const [isResetting, setIsResetting] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(isMobile);
 
@@ -71,7 +72,9 @@ const Navigation = () => {
   }, [pathname, isMobile]);
 
   useEffect(() => {
-    if (focusMode && params.documentId && !isMobile) {
+    if (isMobile) return;
+
+    if (focusMode && params.documentId) {
       collapse();
     } else {
       resetWidth();
@@ -246,13 +249,14 @@ const Navigation = () => {
           className="bg-primary/10 absolute top-0 right-0 h-full w-1 cursor-ew-resize opacity-0 transition group-hover/sidebar:opacity-100"
         ></div>
       </aside>
+
       <div
         ref={navbarRef}
         onMouseEnter={() => setIsNavbarHovered(true)}
         onMouseLeave={() => setIsNavbarHovered(false)}
         className={cn(
-          "absolute top-0 left-60 z-40 w-[calc(100%-240px)] transition-all duration-300",
-          isResetting && "transition-all duration-300 ease-in-out",
+          "absolute top-0 left-60 z-40 w-[calc(100%-240px)]",
+          !isResizingRef.current && "transition-all duration-300 ease-in-out",
           isMobile && "left-0 w-full",
         )}
       >
