@@ -1,7 +1,7 @@
 "use client";
 
-import * as React from "react";
-import { MoonIcon, SunIcon } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Computer, MoonIcon, SunIcon } from "lucide-react";
 import { useTheme } from "next-themes";
 
 import { Button } from "@/components/ui/button";
@@ -13,14 +13,29 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function ModeToggle() {
-  const { setTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
+  const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  }
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="icon">
-          <SunIcon className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <MoonIcon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+          {theme === "light" ? (
+            <SunIcon className="size-[1.2rem]" />
+          ) : theme === "dark" ? (
+            <MoonIcon className="size-[1.2rem]" />
+          ) : (
+            <Computer className="size-[1.2rem]" />
+          )}
+
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
