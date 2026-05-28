@@ -10,7 +10,7 @@ import { DocumentList } from "./DocumentList";
 import { FileIcon, Star } from "lucide-react";
 import { toast } from "sonner";
 
-export const FavoritesList = () => {
+export const FavoritesList = ({ navDrawer }: { navDrawer?: boolean }) => {
   const params = useParams();
   const router = useRouter();
   const documents = useQuery(api.documents.getFavorites);
@@ -62,9 +62,14 @@ export const FavoritesList = () => {
             isFavorite={document.isFavorite}
             onFavorite={() => onToggleFavorite(document._id)}
             showDragHandle={false}
+            navDrawer={navDrawer}
           />
           {expanded[document._id] && (
-            <DocumentList parentDocumentId={document._id} level={1} />
+            <DocumentList
+              parentDocumentId={document._id}
+              level={1}
+              navDrawer={navDrawer}
+            />
           )}
         </div>
       ))}

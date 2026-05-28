@@ -21,11 +21,13 @@ import {
   LucideIcon,
   MoreHorizontal,
   Plus,
+  Settings,
   Star,
   Trash,
 } from "lucide-react";
 
 import { ActionTooltip } from "@/components/action-tooltip";
+import { useNavDrawer } from "@/hooks/useNavDrawer";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -34,13 +36,14 @@ interface ItemProps {
   expanded?: boolean;
   level?: number;
   onExpand?: () => void;
-  label: string;
+  label?: string;
   onClick?: () => void;
   icon: LucideIcon;
   isFavorite?: boolean;
   onFavorite?: () => void;
   shortcut?: string;
   showDragHandle?: boolean;
+  navDrawer?: boolean;
 }
 
 export const Item = ({
@@ -57,9 +60,13 @@ export const Item = ({
   onFavorite,
   shortcut,
   showDragHandle = true,
+  navDrawer,
 }: ItemProps) => {
   const router = useRouter();
   const params = useParams();
+
+  const { setInnerPopoverOpen } = useNavDrawer();
+
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.documents.archive);
   const restore = useMutation(api.documents.restore);
@@ -121,6 +128,11 @@ export const Item = ({
     });
   };
 
+  const onOpenChange = (open: boolean) => {
+    if (!navDrawer) return;
+    setInnerPopoverOpen(open);
+  };
+
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   return (
@@ -131,9 +143,10 @@ export const Item = ({
       className={cn(
         "group text-muted-foreground hover:bg-primary/5 relative flex min-h-6.75 w-full items-center py-1 pr-3 text-sm font-medium",
         active && "bg-primary/5 text-primary",
+        navDrawer ? "rounded-full" : "rounded-none",
       )}
     >
-      <div className="group flex items-center truncate">
+      <div className="group flex items-center justify-center truncate">
         {!!id && showDragHandle && (
           <GripVertical className="text-muted-foreground/50 absolute left-0.5 size-3 opacity-0 group-hover:opacity-100" />
         )}
@@ -153,12 +166,15 @@ export const Item = ({
             {documentIcon}
           </div>
         ) : (
-          <Icon className="text-muted-foreground mr-2 h-4.5 w-4.5 shrink-0" />
+          <Icon
+            className={`text-muted-foreground h-4.5 w-4.5 shrink-0 ${navDrawer && Icon === Settings ? "mr-0" : "mr-2"}`}
+          />
         )}
-
-        <span className="truncate" title={label}>
-          {label}
-        </span>
+        {label && (
+          <span className="truncate" title={label}>
+            {label}
+          </span>
+        )}
       </div>
       {shortcut && (
         <kbd className="bg-muted text-muted-foreground pointer-events-none ml-auto hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none md:inline-flex dark:bg-neutral-700">
@@ -177,7 +193,7 @@ export const Item = ({
               <Plus className="text-muted-foreground h-4 w-4" />
             </div>
           </ActionTooltip>
-          <DropdownMenu>
+          <DropdownMenu onOpenChange={navDrawer ? onOpenChange : undefined}>
             <ActionTooltip label="More actions">
               <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
                 <div

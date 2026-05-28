@@ -34,6 +34,7 @@ import { ScrollableList } from "@/components/scrollable-list";
 import { FavoritesList } from "./FavoritesList";
 import { ActionTooltip } from "@/components/action-tooltip";
 import { useFocusMode } from "@/hooks/useFocusMode";
+import NavDrawer from "./NavDrawer";
 
 const Navigation = () => {
   const params = useParams();
@@ -41,6 +42,7 @@ const Navigation = () => {
   const pathname = usePathname();
 
   const isMobile = useMediaQuery("(max-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 1020px)");
 
   const search = useSearch();
   const settings = useSettings();
@@ -76,7 +78,7 @@ const Navigation = () => {
 
     if (focusMode && params.documentId) {
       collapse();
-    } else {
+    } else if (!isCollapsed) {
       resetWidth();
     }
   }, [params.documentId, focusMode, isMobile]);
@@ -91,7 +93,10 @@ const Navigation = () => {
       isCollapsed &&
       !isMobile
     ) {
-      navbarRef.current.style.setProperty("opacity", "0");
+      setTimeout(
+        () => navbarRef.current?.style.setProperty("opacity", "0"),
+        400,
+      );
     } else {
       navbarRef.current.style.removeProperty("opacity");
     }
@@ -147,14 +152,20 @@ const Navigation = () => {
     if (sidebarRef.current && navbarRef.current) {
       setIsCollapsed(false);
       setIsResetting(true);
-
-      sidebarRef.current.style.width = isMobile ? "100%" : "240px";
-      navbarRef.current.style.removeProperty("width");
-      navbarRef.current.style.setProperty(
-        "width",
-        isMobile ? "0" : "calc(100%-240px)",
-      );
-      navbarRef.current.style.setProperty("left", isMobile ? "100%" : "240px");
+      setTimeout(() => {
+        if (sidebarRef.current && navbarRef.current) {
+          sidebarRef.current.style.width = isMobile ? "100%" : "240px";
+          navbarRef.current.style.removeProperty("width");
+          navbarRef.current.style.setProperty(
+            "width",
+            isMobile ? "0" : "calc(100%-240px)",
+          );
+          navbarRef.current.style.setProperty(
+            "left",
+            isMobile ? "100%" : "240px",
+          );
+        }
+      }, 0);
       setTimeout(() => setIsResetting(false), 300);
     }
   };
@@ -249,7 +260,9 @@ const Navigation = () => {
           className="bg-primary/10 absolute top-0 right-0 h-full w-1 cursor-ew-resize opacity-0 transition group-hover/sidebar:opacity-100"
         ></div>
       </aside>
-
+      {isCollapsed && isDesktop && !focusMode && (
+        <NavDrawer resetWidth={resetWidth} isMobile={isMobile} />
+      )}
       <div
         ref={navbarRef}
         onMouseEnter={() => setIsNavbarHovered(true)}

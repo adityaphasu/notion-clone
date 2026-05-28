@@ -43,11 +43,13 @@ interface SortableItemProps {
   activeId?: string | string[];
   isFavorite?: boolean;
   onFavorite?: (id: Id<"documents">) => void;
+  navDrawer?: boolean;
 }
 interface DocumentListProps {
   parentDocumentId?: Id<"documents">;
   level?: number;
   data?: Doc<"documents">[];
+  navDrawer?: boolean;
 }
 
 const SortableItem = ({
@@ -58,6 +60,7 @@ const SortableItem = ({
   onRedirect,
   activeId,
   onFavorite,
+  navDrawer,
 }: SortableItemProps) => {
   const {
     attributes,
@@ -92,9 +95,14 @@ const SortableItem = ({
         expanded={expanded}
         isFavorite={document.isFavorite}
         onFavorite={() => onFavorite?.(document._id)}
+        navDrawer={navDrawer}
       />
       {expanded && (
-        <DocumentList parentDocumentId={document._id} level={level + 1} />
+        <DocumentList
+          parentDocumentId={document._id}
+          level={level + 1}
+          navDrawer={navDrawer}
+        />
       )}
     </div>
   );
@@ -103,6 +111,7 @@ const SortableItem = ({
 export const DocumentList = ({
   parentDocumentId,
   level = 0,
+  navDrawer,
 }: DocumentListProps) => {
   const params = useParams();
   const router = useRouter();
@@ -237,6 +246,7 @@ export const DocumentList = ({
               activeId={params.documentId}
               isFavorite={document.isFavorite}
               onFavorite={onToggleFavorite}
+              navDrawer={navDrawer}
             />
           ))}
         </SortableContext>

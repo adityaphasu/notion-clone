@@ -8,21 +8,38 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavDrawer } from "@/hooks/useNavDrawer";
+import { cn } from "@/lib/utils";
 import { SignOutButton, useClerk, useUser } from "@clerk/nextjs";
 import { ChevronsLeftRight, LogOut, Settings } from "lucide-react";
 
-export const UserItem = () => {
+export const UserItem = ({ navDrawer }: { navDrawer?: boolean }) => {
   const { user } = useUser();
   const { openUserProfile } = useClerk();
 
+  const { setInnerPopoverOpen } = useNavDrawer();
+
+  const onOpenChange = (open: boolean) => {
+    if (!navDrawer) return;
+    setInnerPopoverOpen(open);
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
+    <DropdownMenu onOpenChange={navDrawer ? onOpenChange : undefined}>
+      <DropdownMenuTrigger className={navDrawer ? "w-full" : ""}>
         <div
           role="button"
-          className="hover:bg-primary/5 flex w-full items-center p-3 text-sm"
+          className={cn(
+            "hover:bg-primary/5 flex w-full items-center p-3 text-sm",
+            navDrawer ? "justify-between rounded-full" : "rounded-none",
+          )}
         >
-          <div className="flex max-w-39 items-center gap-x-2">
+          <div
+            className={cn(
+              "flex items-center gap-x-2",
+              navDrawer ? "w-full" : "max-w-39",
+            )}
+          >
             <Avatar className="h-5 w-5">
               <AvatarImage src={user?.imageUrl} />
             </Avatar>
@@ -61,17 +78,25 @@ export const UserItem = () => {
           asChild
           className="text-muted-foreground w-full cursor-pointer"
         >
-          <button onClick={() => openUserProfile()}>
+          <button
+            onClick={() => {
+              setInnerPopoverOpen(false);
+              openUserProfile();
+            }}
+          >
             <Settings className="text-muted-foreground size-4" />
             Manage Account
           </button>
         </DropdownMenuItem>
 
-        <DropdownMenuItem asChild className="group w-full cursor-pointer">
+        <DropdownMenuItem
+          asChild
+          className="group w-full cursor-pointer hover:text-black dark:hover:text-white!"
+        >
           <SignOutButton>
             <button>
               <LogOut className="text-muted-foreground size-4" />
-              <span className="text-muted-foreground transition-colors group-hover:text-black! hover:text-black">
+              <span className="text-muted-foreground transition-colors group-hover:text-black dark:group-hover:text-white">
                 Log Out
               </span>
             </button>
