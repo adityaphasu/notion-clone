@@ -9,20 +9,20 @@ const font = Poppins({
 
 export const Logo = () => {
   return (
-    <div className="items-center gap-x-2 md:flex">
+    <div className="flex items-center justify-center gap-x-2">
       <Image
+        width={485.44}
+        height={505.7}
         src="/logo.svg"
-        height="40"
-        width="40"
         alt="logo"
-        className="dark:hidden"
+        className="h-10 w-10 dark:hidden"
       />
       <Image
+        width={485.44}
+        height={505.7}
         src="/logo-dark.svg"
-        height="40"
-        width="40"
         alt="logo"
-        className="hidden dark:block"
+        className="hidden h-10 w-10 dark:block"
       />
       <p className={cn("font-semibold", font.className)}>Zotion</p>
     </div>

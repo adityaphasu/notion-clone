@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export const Footer = () => {
   return (
-    <footer className="bg-background dark:bg-dark z-50 flex w-full items-center p-4 md:px-8">
+    <footer className="bg-background dark:bg-dark z-50 flex w-full items-center p-4 md:px-6">
       <Logo />
       <div className="text-muted-foreground flex w-full items-center justify-end gap-x-1 md:ml-auto">
         <Button asChild variant="ghost" className="text-base">

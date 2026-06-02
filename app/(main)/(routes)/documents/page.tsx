@@ -31,18 +31,18 @@ const DocumentsPage = () => {
       <Image
         src="/empty.svg"
         alt="empty"
-        height="300"
-        width="300"
+        height={760}
+        width={1036}
         priority
-        className="h-auto dark:hidden"
+        className="size-75 dark:hidden"
       />
       <Image
         src="/empty-dark.svg"
         alt="empty"
-        height="300"
-        width="300"
+        height={760}
+        width={1036}
         priority
-        className="hidden h-auto dark:block"
+        className="hidden size-75 dark:block"
       />
       <h2 className="text-lg font-medium">
         Welcome to {user?.firstName}&apos;s Zotion
