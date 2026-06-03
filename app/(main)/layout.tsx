@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { Spinner } from "@/components/spinner";
 import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
@@ -8,6 +9,10 @@ import { SearchCommand } from "@/components/search-command";
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, isLoading } = useConvexAuth();
+
+  useEffect(() => {
+    import("@/components/editor");
+  }, []);
 
   if (isLoading) {
     return (
