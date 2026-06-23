@@ -86,6 +86,12 @@ export const SettingsModal = () => {
                 Collapse the sidebar and topbar to minimize distractions and
                 focus on your content.
               </span>
+              <span className="text-muted-foreground text-xs">
+                Shortcut:
+                <kbd className="bg-muted text-muted-foreground pointer-events-none ml-2 hidden h-5 items-center gap-1 rounded border px-1.5 font-mono text-[.625rem] font-medium opacity-100 select-none md:inline-flex dark:bg-neutral-700">
+                  Ctrl + Shift + F
+                </kbd>
+              </span>
             </div>
             <Switch checked={focusMode} onCheckedChange={setFocusMode} />
           </div>

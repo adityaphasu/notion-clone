@@ -46,7 +46,7 @@ const Navigation = () => {
 
   const search = useSearch();
   const settings = useSettings();
-  const { focusMode } = useFocusMode();
+  const { focusMode, setFocusMode } = useFocusMode();
 
   const create = useMutation(api.documents.create);
 
@@ -59,6 +59,7 @@ const Navigation = () => {
 
   const [isNavbarHovered, setIsNavbarHovered] = useState(false);
 
+  // sidebar effects
   useEffect(() => {
     if (isMobile) {
       collapse();
@@ -73,6 +74,7 @@ const Navigation = () => {
     }
   }, [pathname, isMobile]);
 
+  // focus mode effects
   useEffect(() => {
     if (isMobile) return;
 
@@ -102,6 +104,7 @@ const Navigation = () => {
     }
   }, [focusMode, params.documentId, isMobile, isNavbarHovered, isCollapsed]);
 
+  // key binds effects
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.ctrlKey && e.key === "\\") {
@@ -113,6 +116,18 @@ const Navigation = () => {
     document.addEventListener("keydown", handleKeyDown);
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [isCollapsed]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === "F") {
+        e.preventDefault();
+        setFocusMode(!focusMode);
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [focusMode]);
 
   const handleMouseDown = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
