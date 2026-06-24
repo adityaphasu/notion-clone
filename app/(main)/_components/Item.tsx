@@ -143,7 +143,7 @@ export const Item = ({
       className={cn(
         "group text-muted-foreground hover:bg-primary/5 relative flex min-h-6.75 w-full items-center py-1 pr-3 text-sm font-medium",
         active && "bg-primary/5 text-primary",
-        navDrawer ? "rounded-full" : "rounded-none",
+        navDrawer && !id ? "rounded-full" : "rounded-none",
       )}
     >
       <div className="group flex items-center justify-center truncate">

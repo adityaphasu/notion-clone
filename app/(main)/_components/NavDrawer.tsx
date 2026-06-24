@@ -72,7 +72,7 @@ const NavDrawer = ({ resetWidth, isMobile }: NavDrawerProps) => {
           side="right"
           align="center"
           sideOffset={-24}
-          className="bg-secondary w-75 rounded-tl-none rounded-bl-none border border-gray-300 px-2 pt-2 pb-3"
+          className="bg-secondary w-75 rounded-tl-none rounded-bl-none border border-gray-300 pt-2 pr-0 pb-3 pl-2"
           onMouseEnter={() => setIsDrawerOpen(true)}
           onMouseLeave={() => setIsDrawerOpen(false)}
         >
@@ -112,7 +112,7 @@ const NavDrawer = ({ resetWidth, isMobile }: NavDrawerProps) => {
               </div>
             </ActionTooltip>
           </div>
-          <div className="max-h-[65vh] overflow-y-auto pr-0.5 pb-3">
+          <div className="max-h-[65vh] overflow-y-auto pb-3">
             <FavoritesList navDrawer />
             <div>
               <p className="text-muted-foreground/60 px-3 py-1 text-xs font-medium">
