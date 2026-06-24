@@ -46,7 +46,9 @@ const Navigation = () => {
 
   const search = useSearch();
   const settings = useSettings();
+
   const { focusMode, setFocusMode } = useFocusMode();
+  const prevFocusMode = useRef(focusMode);
 
   const create = useMutation(api.documents.create);
 
@@ -80,10 +82,14 @@ const Navigation = () => {
 
     if (focusMode && params.documentId) {
       collapse();
+    } else if (!focusMode && prevFocusMode.current && params.documentId) {
+      resetWidth();
     } else if (!isCollapsed) {
       resetWidth();
     }
-  }, [params.documentId, focusMode, isMobile]);
+
+    prevFocusMode.current = focusMode;
+  }, [params.documentId, focusMode, isMobile, isCollapsed]);
 
   useEffect(() => {
     if (!navbarRef.current) return;
