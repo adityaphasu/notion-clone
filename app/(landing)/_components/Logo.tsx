@@ -24,7 +24,15 @@ export const Logo = () => {
         alt="logo"
         className="hidden h-10 w-10 dark:block"
       />
-      <p className={cn("font-semibold", font.className)}>Zotion</p>
+      <span
+        className={cn(
+          "bg-linear-to-r from-[#111111] via-[#4b4b4b] to-[#a4a4a4] bg-clip-text text-xl font-semibold tracking-tighter text-transparent",
+          "dark:from-[#f5f5f5] dark:via-[#d4d4d4] dark:to-[#8e8e8e]",
+          font.className,
+        )}
+      >
+        <span className="text-2xl">Z</span>otion
+      </span>
     </div>
   );
 };
