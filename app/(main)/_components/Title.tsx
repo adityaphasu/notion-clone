@@ -6,7 +6,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Doc } from "@/convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { ChangeEvent, useRef, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 interface TitleProps {
   initialData: Doc<"documents">;
@@ -32,12 +32,21 @@ export const Title = ({ initialData }: TitleProps) => {
     setIsEditing(false);
   };
 
+  useEffect(() => {
+    if (title === initialData.title) return;
+
+    const timer = setTimeout(() => {
+      update({
+        id: initialData._id,
+        title: title.trim() || "Untitled",
+      });
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [title, initialData.title, initialData._id, update]);
+
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
-    update({
-      id: initialData._id,
-      title: event.target.value || "Untitled",
-    });
   };
 
   const onKeyDown = (event: React.KeyboardEvent) => {
