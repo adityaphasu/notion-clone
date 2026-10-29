@@ -32,21 +32,12 @@ export const Title = ({ initialData }: TitleProps) => {
     setIsEditing(false);
   };
 
-  useEffect(() => {
-    if (title === initialData.title) return;
-
-    const timer = setTimeout(() => {
-      update({
-        id: initialData._id,
-        title: title.trim() || "Untitled",
-      });
-    }, 400);
-
-    return () => clearTimeout(timer);
-  }, [title, initialData.title, initialData._id, update]);
-
   const onChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
+    update({
+      id: initialData._id,
+      title: event.target.value.trim() || "Untitled",
+    });
   };
 
   const onKeyDown = (event: React.KeyboardEvent) => {

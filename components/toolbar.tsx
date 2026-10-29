@@ -24,7 +24,6 @@ interface ToolbarProps {
 
 export const Toolbar = ({ initialData, preview, editorFont }: ToolbarProps) => {
   const inputRef = useRef<ComponentRef<"textarea">>(null);
-  const saveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const [isEditing, setIsEditing] = useState(false);
   const [value, setValue] = useState(initialData.title);
@@ -33,13 +32,6 @@ export const Toolbar = ({ initialData, preview, editorFont }: ToolbarProps) => {
   const removeIcon = useMutation(api.documents.removeIcon);
 
   const coverImage = useCoverImage();
-
-  const saveTitle = () => {
-    update({
-      id: initialData._id,
-      title: value.trim() || "Untitled",
-    });
-  };
 
   const disableInput = () => {
     setIsEditing(false);
@@ -57,16 +49,15 @@ export const Toolbar = ({ initialData, preview, editorFont }: ToolbarProps) => {
   useEffect(() => {
     if (value === initialData.title) return;
 
-    if (saveTimerRef.current) {
-      clearTimeout(saveTimerRef.current);
-    }
-    saveTimerRef.current = setTimeout(saveTitle, 400);
-    return () => {
-      if (saveTimerRef.current) {
-        clearTimeout(saveTimerRef.current);
-      }
-    };
-  }, [value, initialData._id, initialData.title]);
+    const timer = setTimeout(() => {
+      update({
+        id: initialData._id,
+        title: value.trim() || "Untitled",
+      });
+    }, 400);
+
+    return () => clearTimeout(timer);
+  }, [value, initialData._id, initialData.title, update]);
 
   const onInput = (value: string) => {
     setValue(value);
@@ -75,10 +66,7 @@ export const Toolbar = ({ initialData, preview, editorFont }: ToolbarProps) => {
   const onKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
-      if (saveTimerRef.current) {
-        clearTimeout(saveTimerRef.current);
-      }
-      saveTitle();
+      setIsEditing(false);
       inputRef.current?.blur();
     }
   };
