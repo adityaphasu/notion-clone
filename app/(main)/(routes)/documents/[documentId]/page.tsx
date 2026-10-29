@@ -120,7 +120,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
           !isFullWidth ? "max-w-200" : ""
         }`}
       >
-        <Toolbar initialData={doc} editorFont={activeFont} />
+        <Toolbar key={doc._id} initialData={doc} editorFont={activeFont} />
         <Editor
           onChange={onChange}
           initialContent={doc.content}
