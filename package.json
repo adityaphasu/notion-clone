@@ -19,8 +19,8 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@edgestore/react": "^0.7.0",
-    "@edgestore/server": "^0.7.0",
+    "@edgestore/react": "^1.0.1",
+    "@edgestore/server": "^1.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -38,7 +38,7 @@
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.1",
     "usehooks-ts": "^3.1.1",
-    "zod": "^3.24.2",
+    "zod": "^4.6.7",
     "zustand": "^5.0.14"
   },
   "devDependencies": {
