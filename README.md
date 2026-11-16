@@ -69,6 +69,8 @@ Copy `.env.example` to `.env.local`, then fill in the values from Convex and Cle
 CONVEX_DEPLOYMENT=
 NEXT_PUBLIC_CONVEX_URL=
 CLERK_JWT_ISSUER_DOMAIN=
+# for deployment
+CONVEX_DEPLOY_KEY=
 
 # from Clerk dashboard
 NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
